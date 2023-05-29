@@ -1,10 +1,10 @@
 from channel import *
-from utils import *
 from pyfiglet import Figlet
+from utils import logger
 
 
 def main():
-    output("wechat-gptbot run ....")
+    logger.info("wechat-gptbot run ....")
     get_personal_info()
     bot()
 

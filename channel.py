@@ -5,6 +5,7 @@ import websocket
 from bs4 import BeautifulSoup
 
 from api.openai import *
+from utils import logger
 
 # read local config file
 current_path = os.path.dirname(__file__)
@@ -81,7 +82,7 @@ def get_personal_info():
     }
     respJson = send(uri, data)
     try:
-        if json.loads(respJson["content"])['wx_name']:
+        if json.loads(respJson["content"])["wx_name"]:
             wechatBotInfo = f"""
 
             wechat login info:
@@ -94,16 +95,17 @@ def get_personal_info():
         else:
             wechatBotInfo = respJson
     except Exception as e:
-        output(f"ERROR:{e}")
+        logger.error("Get personal info failed!")
+        logger.exception(e)
         wechatBotInfo = respJson
-    output(wechatBotInfo)
+    logger.info(wechatBotInfo)
 
 
 def handle_nick(j):
     data = j.content
     i = 0
     for d in data:
-        output(f"nickname:{d.nickname}")
+        logger.info(f"nickname:{d.nickname}")
         i += 1
 
 
@@ -111,8 +113,9 @@ def hanle_memberlist(j):
     data = j.content
     i = 0
     for d in data:
-        output(f"roomid:{d.roomid}")
+        logger.info(f"roomid:{d.roomid}")
         i += 1
+
 
 def send_wxuser_list():
     """
@@ -126,22 +129,26 @@ def send_wxuser_list():
     }
     return json.dumps(qs)
 
+
 def handle_wxuser_list(self):
-    output("Start completed!")
+    logger.info("Start completed!")
 
 
 def heartbeat(msgJson):
-    output(msgJson["content"])
+    logger.info(msgJson["content"])
+
 
 def on_open(ws):
     # initialize
     ws.send(send_wxuser_list())
 
+
 def on_error(ws, error):
-    output(f"on_error:{error}")
+    logger.error(f"on_error:{error}")
+
 
 def on_close(ws):
-    output("closed")
+    logger.info("closed")
 
 
 # send message function
@@ -163,26 +170,21 @@ def send_msg(msg, wxid="null", roomid=None, nickname="null"):
         "nickname": nickname,
         "ext": "null",
     }
-    output(f"send message: {qs}")
+    logger.info(f"send message: {qs}")
     return json.dumps(qs)
 
 
 def welcome_join(msgJson):
-    output(f"receive message:{msgJson}")
+    logger.info(f"receive message:{msgJson}")
     if "邀请" in msgJson["content"]["content"]:
         roomid = msgJson["content"]["id1"]
         nickname = msgJson["content"]["content"].split('"')[-2]
-    ws.send(send_msg(f'Welcome our new friend in group',roomid=roomid,wxid='null',nickname=nickname))
+    ws.send(send_msg(f"Welcome our new friend in group", roomid=roomid, wxid="null", nickname=nickname))
 
 
 def handleMsg_cite(msgJson):
     # process message with quote
-    msgXml = (
-        msgJson["content"]["content"]
-            .replace("&amp;", "&")
-            .replace("&lt;", "<")
-            .replace("&gt;", ">")
-    )
+    msgXml = msgJson["content"]["content"].replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
     soup = BeautifulSoup(msgXml, "lxml")
     msgJson = {
         "content": soup.select_one("title").text,
@@ -200,9 +202,9 @@ def handleMsg_cite(msgJson):
 
 def handle_recv_msg(msgJson):
     if "wxid" not in msgJson and msgJson["status"] == "SUCCSESSED":
-        output(f"消息发送成功")
+        logger.info(f"消息发送成功")
         return
-    output(f"收到消息:{msgJson}")
+    logger.info(f"收到消息:{msgJson}")
     msg = ""
     keyword = msgJson["content"].replace("\u2005", "")
     if "@chatroom" in msgJson["wxid"]:
@@ -241,6 +243,7 @@ def handle_recv_msg(msgJson):
             msg = OpenaiServer(keyword.replace("Hey", ""), senderid).replace("hey", "").replace("\n\n", "")
             ws.send(send_msg(msg, wxid=senderid))
 
+
 def on_message(ws, message):
     j = json.loads(message)
     resp_type = j["type"]
@@ -266,9 +269,7 @@ def on_message(ws, message):
 
 
 # websocket.enableTrace(True)
-ws = websocket.WebSocketApp(
-    SERVER, on_open=on_open, on_message=on_message, on_error=on_error, on_close=on_close
-)
+ws = websocket.WebSocketApp(SERVER, on_open=on_open, on_message=on_message, on_error=on_error, on_close=on_close)
 
 
 def bot():
