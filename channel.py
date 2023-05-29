@@ -3,6 +3,7 @@ import warnings
 
 import websocket
 from bs4 import BeautifulSoup
+import requests
 
 from api.openai import *
 from utils import logger

@@ -2,6 +2,7 @@ from channel import *
 from pyfiglet import Figlet
 from utils import logger
 from config import load_config
+from termcolor import cprint
 
 
 def main():
