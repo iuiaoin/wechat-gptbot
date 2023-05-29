@@ -1,0 +1,6 @@
+{
+  "openai_api_key": "YOUR API SECRET KEY",
+  "admin_id": "YOUR WECHAT ID",
+  "ip": "127.0.0.1",
+  "port": "5555"
+}

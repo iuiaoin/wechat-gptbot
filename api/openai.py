@@ -1,15 +1,9 @@
-import configparser
-import os
 import openai
 from common.session import Session
 from utils.log import logger
+from config import conf
 
-current_path = os.path.dirname(__file__)
-config_path = os.path.join(current_path, "../config.ini")
-config = configparser.ConfigParser()
-config.read(config_path, encoding="utf-8")
-openai_key = config.get("apiService", "openai_key")
-openai.api_key = openai_key
+openai.api_key = conf().get("openai_api_key")
 
 
 def OpenaiServer(msg=None, session_id=""):

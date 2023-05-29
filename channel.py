@@ -6,15 +6,11 @@ from bs4 import BeautifulSoup
 
 from api.openai import *
 from utils import logger
+from config import conf
 
-# read local config file
-current_path = os.path.dirname(__file__)
-config_path = os.path.join(current_path, "./config.ini")
-config = configparser.ConfigParser()  # class instance
-config.read(config_path, encoding="utf-8")
-ip = config.get("server", "ip")
-port = config.get("server", "port")
-admin_id = config.get("server", "admin_id")
+ip = conf().get("ip")
+port = conf().get("port")
+admin_id = conf().get("admin_id")
 
 # websocket._logging._logger.level = -99
 requests.packages.urllib3.disable_warnings()
