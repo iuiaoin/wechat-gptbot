@@ -4,6 +4,7 @@ from utils.log import logger
 from config import conf
 
 openai.api_key = conf().get("openai_api_key")
+model = conf().get("model")
 
 
 def OpenaiServer(msg=None, session_id=""):
@@ -15,7 +16,7 @@ def OpenaiServer(msg=None, session_id=""):
         else:
             session = Session.build_session_query(msg, session_id)
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model=model,
                 messages=session,
                 temperature=0.6,
                 max_tokens=1000,
