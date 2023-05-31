@@ -11,7 +11,6 @@ from config import conf
 
 ip = conf().get("ip")
 port = conf().get("port")
-admin_id = conf().get("admin_id")
 
 # websocket._logging._logger.level = -99
 requests.packages.urllib3.disable_warnings()
@@ -213,13 +212,7 @@ def handle_recv_msg(msgJson):
         senderid = msgJson["wxid"]  # personal id
     nickname = get_member_nick(roomid, senderid)
     if roomid:
-        if keyword == "test" and senderid in admin_id.split(","):
-            msg = ai_reply(keyword)
-            ws.send(send_msg(msg, wxid=roomid))
-            # msg = "Server is Online"
-            # ws.send(send_msg(msg, roomid=roomid, wxid=senderid, nickname=nickname))
-            # Group message reply
-        elif keyword == "#清除记忆":
+        if keyword == "#清除记忆":
             Session.clear_session(roomid)
             ws.send(send_msg("记忆已清除", wxid=roomid))
         elif keyword == "#清除所有":
