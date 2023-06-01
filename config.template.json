@@ -1,6 +1,4 @@
 {
   "openai_api_key": "YOUR API SECRET KEY",
-  "model": "gpt-3.5-turbo",
-  "ip": "127.0.0.1",
-  "port": "5555"
+  "model": "gpt-3.5-turbo"
 }

@@ -8,16 +8,14 @@ import requests
 from api.openai import *
 from utils import logger
 from config import conf
-
-ip = conf().get("ip")
-port = conf().get("port")
+from utils import const
 
 # websocket._logging._logger.level = -99
 requests.packages.urllib3.disable_warnings()
 warnings.filterwarnings("ignore")
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "1"
 
-SERVER = f"ws://{ip}:{port}"
+SERVER = f"ws://{const.IP}:{const.PORT}"
 HEART_BEAT = 5005
 RECV_TXT_MSG = 1
 # message with quote
@@ -54,7 +52,7 @@ def send(uri, data):
         "ext": "null",
     }
     base_data.update(data)
-    url = f"http://{ip}:{port}/{uri}"
+    url = f"http://{const.IP}:{const.PORT}/{uri}"
     res = requests.post(url, json={"para": base_data}, timeout=5)
     return res.json()
 
