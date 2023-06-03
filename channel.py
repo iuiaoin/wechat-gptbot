@@ -7,7 +7,6 @@ import requests
 
 from api.openai import *
 from utils import logger
-from config import conf
 from utils import const
 
 # websocket._logging._logger.level = -99

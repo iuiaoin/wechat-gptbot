@@ -14,5 +14,5 @@ def main():
 if __name__ == "__main__":
     load_config()
     f = Figlet(font="slant", width=2000)
-    cprint(f.renderText("WECHAT GPTBOT"), "green")
+    cprint(f.renderText("WeChat GPTBot"), "green")
     main()
