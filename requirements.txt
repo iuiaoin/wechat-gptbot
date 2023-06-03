@@ -1,5 +1,5 @@
 beautifulsoup4==4.11.1
-lxml=4.9.2
+lxml==4.9.2
 pyfiglet==0.8.post1
 requests==2.28.1
 termcolor==2.1.1
