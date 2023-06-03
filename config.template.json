@@ -1,4 +1,5 @@
 {
   "openai_api_key": "YOUR API SECRET KEY",
-  "model": "gpt-3.5-turbo"
+  "model": "gpt-3.5-turbo",
+  "role_desc": "You are a helpful assistant."
 }

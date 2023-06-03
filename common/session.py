@@ -1,10 +1,13 @@
 from common.expired_dict import ExpiredDict
+from config import conf
+
 
 class Session(object):
     all_sessions = ExpiredDict(3600)
+
     @staticmethod
     def build_session_query(query, session_id):
-        '''
+        """
         build query with conversation history
         e.g.  [
             {"role": "system", "content": "You are a helpful assistant."},
@@ -15,14 +18,14 @@ class Session(object):
         :param query: query content
         :param session_id: session id
         :return: query content with conversaction
-        '''
+        """
         session = Session.all_sessions.get(session_id, [])
         if len(session) == 0:
-            system_prompt = "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。"
-            system_item = {'role': 'system', 'content': system_prompt}
+            system_prompt = conf().get("role_desc")
+            system_item = {"role": "system", "content": system_prompt}
             session.append(system_item)
             Session.all_sessions[session_id] = session
-        user_item = {'role': 'user', 'content': query}
+        user_item = {"role": "user", "content": query}
         session.append(user_item)
         return session
 
@@ -32,12 +35,11 @@ class Session(object):
         session = Session.all_sessions.get(session_id)
         if session:
             # append conversation
-            gpt_item = {'role': 'assistant', 'content': answer}
+            gpt_item = {"role": "assistant", "content": answer}
             session.append(gpt_item)
 
         # discard exceed limit conversation
         Session.discard_exceed_conversation(session, max_tokens, total_tokens)
-    
 
     @staticmethod
     def discard_exceed_conversation(session, max_tokens, total_tokens):
@@ -49,7 +51,7 @@ class Session(object):
                 session.pop(1)
                 session.pop(1)
             else:
-                break    
+                break
             dec_tokens = dec_tokens - max_tokens
 
     @staticmethod
