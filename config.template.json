@@ -1,5 +1,6 @@
 {
   "openai_api_key": "YOUR API SECRET KEY",
   "model": "gpt-3.5-turbo",
-  "role_desc": "You are a helpful assistant."
+  "role_desc": "You are a helpful assistant.",
+  "session_expired_time": 3600
 }
