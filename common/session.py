@@ -44,7 +44,6 @@ class Session(object):
     @staticmethod
     def discard_exceed_conversation(session, max_tokens, total_tokens):
         dec_tokens = int(total_tokens)
-        # logger.info("prompt tokens used={},max_tokens={}".format(used_tokens,max_tokens))
         while dec_tokens > max_tokens:
             # pop first conversation
             if len(session) > 3:
