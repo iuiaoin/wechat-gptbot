@@ -3,11 +3,10 @@ from common.session import Session
 from utils.log import logger
 from config import conf
 
-openai.api_key = conf().get("openai_api_key")
-model = conf().get("model")
-
 
 def OpenaiServer(msg=None, session_id=""):
+    openai.api_key = conf().get("openai_api_key")
+    model = conf().get("model")
     res = ""
     try:
         if msg is None:
