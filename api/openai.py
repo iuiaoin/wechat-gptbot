@@ -7,6 +7,8 @@ from config import conf
 def OpenaiServer(msg=None, session_id=""):
     openai.api_key = conf().get("openai_api_key")
     model = conf().get("model")
+    max_tokens = conf().get("max_tokens")
+    temperature = conf().get("temperature")
     res = ""
     try:
         if msg is None:
@@ -17,8 +19,8 @@ def OpenaiServer(msg=None, session_id=""):
             response = openai.ChatCompletion.create(
                 model=model,
                 messages=session,
-                temperature=0.6,
-                max_tokens=1000,
+                temperature=temperature,
+                max_tokens=max_tokens,
                 top_p=1.0,
                 frequency_penalty=0.0,
                 presence_penalty=0.0,

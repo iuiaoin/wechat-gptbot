@@ -32,7 +32,7 @@ class Session(object):
 
     @staticmethod
     def save_session(answer, session_id, total_tokens):
-        max_tokens = 1000
+        max_tokens = conf().get("max_tokens")
         session = Session.all_sessions.get(session_id)
         if session:
             # append conversation
