@@ -9,6 +9,7 @@ import os
 from utils.gen import gen_id
 from bot.chatgpt import ChatGPTBot
 from common.singleton import singleton
+from utils.noop import noop
 
 
 @singleton
@@ -40,6 +41,7 @@ class WeChatChannel:
             const.RECV_PIC_MSG: self.handle_message,
             const.RECV_TXT_MSG: self.handle_message,
             const.RECV_TXT_CITE_MSG: self.handle_cite_message,
+            const.HEART_BEAT: noop
         }
         handlers.get(msg_type, logger.info)(msg)
 
@@ -156,10 +158,10 @@ class WeChatChannel:
         response = requests.post(url, json={"para": base_data}, timeout=5)
         return response.json()
 
-    def on_open(self):
+    def on_open(self, ws):
         logger.info("[Websocket] connected")
 
-    def on_close(self):
+    def on_close(self, ws):
         logger.info("[Websocket] disconnected")
 
     def on_error(self, ws, error):
