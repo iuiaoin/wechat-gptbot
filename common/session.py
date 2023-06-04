@@ -3,8 +3,7 @@ from config import conf
 
 
 class Session(object):
-    expired_duration = conf().get("session_expired_duration")
-    all_sessions = ExpiredDict(expired_duration)
+    all_sessions = ExpiredDict(conf().get("session_expired_duration") or 3600)
 
     @staticmethod
     def build_session_query(query, session_id):
