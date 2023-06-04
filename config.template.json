@@ -4,5 +4,6 @@
   "role_desc": "You are a helpful assistant.",
   "session_expired_duration": 3600,
   "max_tokens": 1000,
-  "temperature": 0.9
+  "temperature": 0.9,
+  "proxy": ""
 }
