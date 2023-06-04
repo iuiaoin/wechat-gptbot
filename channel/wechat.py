@@ -83,14 +83,16 @@ class WeChatChannel:
         context["session_id"] = room_id
         sender_name = self.get_sender_name(room_id, sender_id)
         if query.startswith(f"@{personal_name}"):
-            reply_text = ChatGPTBot().reply(query.replace(f"@{personal_name}", ""), room_id)
+            reply_text = ChatGPTBot().reply(query.replace(f"@{personal_name}", ""), context)
             reply_msg = self.build_msg(reply_text, wxid=sender_id, room_id=room_id, nickname=sender_name)
             self.ws.send(reply_msg)
 
     def handle_single(self, msg):
         sender_id = msg["wxid"]
+        context = dict()
+        context["session_id"] = sender_id
         query = msg["content"].strip()
-        reply_text = ChatGPTBot().reply(query, sender_id)
+        reply_text = ChatGPTBot().reply(query, context)
         reply_msg = self.build_msg(reply_text, wxid=sender_id)
         self.ws.send(reply_msg)
 
