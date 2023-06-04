@@ -96,7 +96,7 @@ class WeChatChannel:
         reply_msg = self.build_msg(reply_text, wxid=sender_id)
         self.ws.send(reply_msg)
 
-    def build_msg(content, wxid="null", room_id=None, nickname="null"):
+    def build_msg(self, content, wxid="null", room_id=None, nickname="null"):
         if room_id:
             msg_type = const.AT_MSG
         else:
