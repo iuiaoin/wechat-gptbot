@@ -27,8 +27,8 @@ class WeChatChannel:
         )
 
     def startup(self):
-        self.ws.run_forever()
         logger.info("App startup successfully!")
+        self.ws.run_forever()
 
     def on_message(self, ws, message):
         msg = json.loads(message)
