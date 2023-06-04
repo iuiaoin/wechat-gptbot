@@ -9,7 +9,6 @@ import os
 from utils.gen import gen_id
 from bot.chatgpt import ChatGPTBot
 from common.singleton import singleton
-from utils.noop import noop
 
 
 @singleton
@@ -41,9 +40,12 @@ class WeChatChannel:
             const.RECV_PIC_MSG: self.handle_message,
             const.RECV_TXT_MSG: self.handle_message,
             const.RECV_TXT_CITE_MSG: self.handle_cite_message,
-            const.HEART_BEAT: noop
+            const.HEART_BEAT: self.noop,
         }
         handlers.get(msg_type, logger.info)(msg)
+
+    def noop(self, msg):
+        pass
 
     def handle_cite_message(self, msg):
         xml_msg = msg["content"]["content"].replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
