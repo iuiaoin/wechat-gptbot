@@ -119,28 +119,23 @@ class WeChatChannel:
 
     def send_img(self, content, wxid):
         # download image
-        # path = os.path.abspath("./assets")
-        # img_name = int(time.time() * 1000)
-        # with open(f"{path}\\{img_name}.png", "wb+") as f:
-        #     f.write(content)
-        #     f.close()
-        # img_path = os.path.abspath(f"{path}\\{img_name}.png").replace("\\", "\\\\")
+        path = os.path.abspath("./assets")
+        img_name = int(time.time() * 1000)
+        response = requests.get(content, stream=True)
+        response.raise_for_status()  # Raise exception if invalid response
 
-        # download image
-        pic_res = requests.get(content, stream=True)
-        image_storage = io.BytesIO()
-        for block in pic_res.iter_content(1024):
-            image_storage.write(block)
-        image_storage.seek(0)
-
-        # convert to base64
-        image_base64 = base64.b64encode(image_storage.getvalue()).decode("utf-8")
+        with open(f"{path}\\{img_name}.png", "wb+") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:  # filter out keep-alive new chunks
+                    f.write(chunk)
+            f.close()
+        img_path = os.path.abspath(f"{path}\\{img_name}.png").replace("\\", "\\\\")
 
         data = {
             "id": gen_id(),
             "type": const.PIC_MSG,
             "roomid": "null",
-            "content": image_base64,
+            "content": img_path,
             "wxid": wxid,
             "nickname": "null",
             "ext": "null",
