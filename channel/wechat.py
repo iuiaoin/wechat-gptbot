@@ -11,7 +11,8 @@ from bot.chatgpt import ChatGPTBot
 from common.singleton import singleton
 from config import conf
 from utils.check import check_prefix
-from common.reply import Reply, ReplyType
+from common.reply import ReplyType
+import io
 
 
 @singleton
@@ -113,12 +114,19 @@ class WeChatChannel:
             reply_msg = self.build_msg(reply.content, wxid=sender_id)
             self.ws.send(reply_msg)
 
-    def send_img(self, msg, wxid):
+    def send_img(self, content, wxid):
+        # download image
+        pic_res = requests.get(content, stream=True)
+        image_storage = io.BytesIO()
+        for block in pic_res.iter_content(1024):
+            image_storage.write(block)
+        image_storage.seek(0)
+
         data = {
             "id": gen_id(),
             "type": const.PIC_MSG,
             "roomid": "null",
-            "content": msg,
+            "content": image_storage,
             "wxid": wxid,
             "nickname": "null",
             "ext": "null",
