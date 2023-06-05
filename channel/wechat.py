@@ -118,34 +118,37 @@ class WeChatChannel:
             self.ws.send(reply_msg)
 
     def send_img(self, content, wxid):
-        # download image
-        path = os.path.abspath("./assets")
-        img_name = int(time.time() * 1000)
-        response = requests.get(content, stream=True)
-        response.raise_for_status()  # Raise exception if invalid response
+        try:
+          # download image
+          path = os.path.abspath("./assets")
+          img_name = int(time.time() * 1000)
+          response = requests.get(content, stream=True)
+          response.raise_for_status()  # Raise exception if invalid response
 
-        with open(f"{path}\\{img_name}.png", "wb+") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                if chunk:  # filter out keep-alive new chunks
-                    f.write(chunk)
-            f.close()
-        img_path = os.path.abspath(f"{path}\\{img_name}.png").replace("\\", "\\\\")
+          with open(f"{path}\\{img_name}.png", "wb+") as f:
+              for chunk in response.iter_content(chunk_size=8192):
+                  if chunk:  # filter out keep-alive new chunks
+                      f.write(chunk)
+              f.close()
+          img_path = os.path.abspath(f"{path}\\{img_name}.png").replace("\\", "\\\\")
 
-        data = {
-            "id": gen_id(),
-            "type": const.PIC_MSG,
-            "roomid": "null",
-            "content": img_path,
-            "wxid": wxid,
-            "nickname": "null",
-            "ext": "null",
-        }
-        url = f"http://{const.IP}:{const.PORT}/api/sendpic"
-        res = requests.post(url, json={"para": data}, timeout=5)
-        if res.status_code == 200 and res.json()["status"] == const.SUCCESS:
-            logger.info("image sent successfully")
-        else:
-            logger.error(f"[Server Error]: {res.text}")
+          data = {
+              "id": gen_id(),
+              "type": const.PIC_MSG,
+              "roomid": "null",
+              "content": img_path,
+              "wxid": wxid,
+              "nickname": "null",
+              "ext": "null",
+          }
+          url = f"http://{const.IP}:{const.PORT}/api/sendpic"
+          res = requests.post(url, json={"para": data}, timeout=5)
+          if res.status_code == 200 and res.json()["status"] == const.SUCCESS:
+              logger.info("image sent successfully")
+          else:
+              logger.error(f"[Server Error]: {res.text}")
+        except Exception as e:
+          logger.error(f"[Download Image Error]: {e}")
 
     def build_msg(self, content, wxid="null", room_id=None, nickname="null"):
         if room_id:
