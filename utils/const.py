@@ -1,6 +1,6 @@
+# server
 IP = "127.0.0.1"
 PORT = "5555"
-
 SERVER = f"ws://{IP}:{PORT}"
 
 # message type
@@ -22,3 +22,6 @@ PERSONAL_DETAIL = 6550
 DEBUG_SWITCH = 6000
 DESTROY_ALL = 9999
 JOIN_ROOM = 10000
+
+# context type
+CREATE_IMAGE = "CREATE_IMAGE"

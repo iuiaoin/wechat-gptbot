@@ -3,6 +3,7 @@ from config import conf
 from common.singleton import singleton
 from utils.log import logger
 from common.session import Session
+from utils import const
 
 
 @singleton
@@ -15,21 +16,35 @@ class ChatGPTBot:
 
     def reply(self, query, context=None):
         logger.info(f"[ChatGPT] Query={query}")
-        session_id = context.get("session_id")
-        clear_session_command = conf().get("clear_session_command") or "#clear session"
-        clear_all_sessions_command = conf().get("clear_all_sessions_command") or "#clear all sessions"
-        if query == clear_session_command:
-            Session.clear_session(session_id)
-            return "The session has been cleared"
-        elif query == clear_all_sessions_command:
-            Session.clear_all_session()
-            return "All sessions have been cleared"
-        session = Session.build_session_query(query, session_id)
-        response = self.reply_text(session)
-        logger.info(f"[ChatGPT] Response={response['content']}")
-        if response["completion_tokens"] > 0:
-            Session.save_session(response["content"], session_id, response["total_tokens"])
-        return response["content"]
+        if context.get("type", None) == const.CREATE_IMAGE:
+            return self.reply_img(query)
+        else:
+            session_id = context.get("session_id")
+            clear_session_command = conf().get("clear_session_command") or "#clear session"
+            clear_all_sessions_command = conf().get("clear_all_sessions_command") or "#clear all sessions"
+            if query == clear_session_command:
+                Session.clear_session(session_id)
+                return "The session has been cleared"
+            elif query == clear_all_sessions_command:
+                Session.clear_all_session()
+                return "All sessions have been cleared"
+            session = Session.build_session_query(query, session_id)
+            response = self.reply_text(session)
+            logger.info(f"[ChatGPT] Response={response['content']}")
+            if response["completion_tokens"] > 0:
+                Session.save_session(response["content"], session_id, response["total_tokens"])
+            return response["content"]
+
+    def reply_img(self, query):
+        try:
+            response = openai.Image.create(prompt=query, n=1, size="256x256")
+            image_url = response["data"][0]["url"]
+            logger.info(f"[ChatGPT] Image={image_url}")
+            return image_url
+        except Exception as e:
+            logger.error(f"[ChatGPT] Create image failed: {e}")
+            # TODO distinguish plaintext and image url
+            return "Image created failed"
 
     def reply_text(self, session):
         model = conf().get("model")

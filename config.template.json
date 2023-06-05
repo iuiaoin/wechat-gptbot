@@ -6,6 +6,7 @@
   "max_tokens": 1000,
   "temperature": 0.9,
   "proxy": "",
+  "create_image_prefix": ["draw", "paint", "imagine"],
   "clear_current_session_command": "#clear session",
   "clear_all_sessions_command": "#clear all sessions"
 }

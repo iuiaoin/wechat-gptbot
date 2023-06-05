@@ -9,6 +9,7 @@ import os
 from utils.gen import gen_id
 from bot.chatgpt import ChatGPTBot
 from common.singleton import singleton
+from config import conf
 
 
 @singleton
@@ -83,6 +84,8 @@ class WeChatChannel:
         context["session_id"] = room_id
         sender_name = self.get_sender_name(room_id, sender_id)
         if query.startswith(f"@{personal_name}"):
+            # TODO pass CREATE_IMAGE type if match the prefix
+            create_image_prefix = conf().get("create_image_prefix")
             reply_text = ChatGPTBot().reply(query.replace(f"@{personal_name}", ""), context)
             reply_msg = self.build_msg(reply_text, wxid=sender_id, room_id=room_id, nickname=sender_name)
             self.ws.send(reply_msg)
