@@ -89,7 +89,7 @@ class WeChatChannel:
         context["session_id"] = room_id
         sender_name = self.get_sender_name(room_id, sender_id)
         if query.startswith(f"@{personal_name}"):
-            cooked_query = query.replace(f"@{personal_name}", "")
+            cooked_query = query.replace(f"@{personal_name}", "").strip()
             create_image_prefix = conf().get("create_image_prefix")
             match_prefix = check_prefix(cooked_query, create_image_prefix)
             if match_prefix:
