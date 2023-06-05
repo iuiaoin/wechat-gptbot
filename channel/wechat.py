@@ -12,7 +12,8 @@ from common.singleton import singleton
 from config import conf
 from utils.check import check_prefix
 from common.reply import ReplyType
-import io
+import os
+import time
 
 
 @singleton
@@ -116,17 +117,18 @@ class WeChatChannel:
 
     def send_img(self, content, wxid):
         # download image
-        pic_res = requests.get(content, stream=True)
-        image_storage = io.BytesIO()
-        for block in pic_res.iter_content(1024):
-            image_storage.write(block)
-        image_storage.seek(0)
+        path = os.path.abspath("../assets")
+        img_name = int(time.time() * 1000)
+        with open(f"{path}\\{img_name}.png", "wb+") as f:
+            f.write(content)
+            f.close()
+        img_path = os.path.abspath(f"{path}\\{img_name}.png").replace("\\", "\\\\")
 
         data = {
             "id": gen_id(),
             "type": const.PIC_MSG,
             "roomid": "null",
-            "content": image_storage,
+            "content": img_path,
             "wxid": wxid,
             "nickname": "null",
             "ext": "null",
