@@ -25,3 +25,6 @@ JOIN_ROOM = 10000
 
 # context type
 CREATE_IMAGE = "CREATE_IMAGE"
+
+# "SUCCSESSED" should be a typo in the hook server😂
+SUCCESS = "SUCCSESSED"

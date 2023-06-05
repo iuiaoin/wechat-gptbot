@@ -10,6 +10,8 @@ from utils.gen import gen_id
 from bot.chatgpt import ChatGPTBot
 from common.singleton import singleton
 from config import conf
+from utils.check import check_prefix
+from common.reply import Reply, ReplyType
 
 
 @singleton
@@ -65,8 +67,7 @@ class WeChatChannel:
         self.handle_message(cooked_msg)
 
     def handle_message(self, msg):
-        # "SUCCSESSED" should be a typo in the hook server😂
-        if "wxid" not in msg and msg["status"] == "SUCCSESSED":
+        if "wxid" not in msg and msg["status"] == const.SUCCESS:
             logger.info("message sent successfully")
             return
         logger.info(f"message received: {msg}")
@@ -84,20 +85,50 @@ class WeChatChannel:
         context["session_id"] = room_id
         sender_name = self.get_sender_name(room_id, sender_id)
         if query.startswith(f"@{personal_name}"):
-            # TODO pass CREATE_IMAGE type if match the prefix
+            cooked_query = query.replace(f"@{personal_name}", "")
             create_image_prefix = conf().get("create_image_prefix")
-            reply_text = ChatGPTBot().reply(query.replace(f"@{personal_name}", ""), context)
-            reply_msg = self.build_msg(reply_text, wxid=sender_id, room_id=room_id, nickname=sender_name)
-            self.ws.send(reply_msg)
+            match_prefix = check_prefix(cooked_query, create_image_prefix)
+            if match_prefix:
+                context["type"] = const.CREATE_IMAGE
+            reply = ChatGPTBot().reply(cooked_query, context)
+            if reply.type == ReplyType.IMAGE:
+                self.send_img(reply.content, room_id)
+            else:
+                reply_msg = self.build_msg(reply.content, wxid=sender_id, room_id=room_id, nickname=sender_name)
+                self.ws.send(reply_msg)
 
     def handle_single(self, msg):
         sender_id = msg["wxid"]
         context = dict()
         context["session_id"] = sender_id
         query = msg["content"].strip()
-        reply_text = ChatGPTBot().reply(query, context)
-        reply_msg = self.build_msg(reply_text, wxid=sender_id)
-        self.ws.send(reply_msg)
+        create_image_prefix = conf().get("create_image_prefix")
+        match_prefix = check_prefix(query, create_image_prefix)
+        if match_prefix:
+            context["type"] = const.CREATE_IMAGE
+        reply = ChatGPTBot().reply(query, context)
+        if reply.type == ReplyType.IMAGE:
+            self.send_img(reply.content, sender_id)
+        else:
+            reply_msg = self.build_msg(reply.content, wxid=sender_id)
+            self.ws.send(reply_msg)
+
+    def send_img(self, msg, wxid):
+        data = {
+            "id": gen_id(),
+            "type": const.PIC_MSG,
+            "roomid": "null",
+            "content": msg,
+            "wxid": wxid,
+            "nickname": "null",
+            "ext": "null",
+        }
+        url = f"http://{const.IP}:{const.PORT}/api/sendpic"
+        res = requests.post(url, json={"para": data}, timeout=5)
+        if res.status_code == 200 and res.json()["status"] == const.SUCCESS:
+            logger.info("image sent successfully")
+        else:
+            logger.error(f"[Server Error]: {res.text}")
 
     def build_msg(self, content, wxid="null", room_id=None, nickname="null"):
         if room_id:

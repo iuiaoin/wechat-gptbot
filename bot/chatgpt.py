@@ -4,6 +4,7 @@ from common.singleton import singleton
 from utils.log import logger
 from common.session import Session
 from utils import const
+from common.reply import Reply, ReplyType
 
 
 @singleton
@@ -24,27 +25,26 @@ class ChatGPTBot:
             clear_all_sessions_command = conf().get("clear_all_sessions_command") or "#clear all sessions"
             if query == clear_session_command:
                 Session.clear_session(session_id)
-                return "The session has been cleared"
+                return Reply(ReplyType.TEXT, "The session has been cleared")
             elif query == clear_all_sessions_command:
                 Session.clear_all_session()
-                return "All sessions have been cleared"
+                return Reply(ReplyType.TEXT, "All sessions have been cleared")
             session = Session.build_session_query(query, session_id)
             response = self.reply_text(session)
             logger.info(f"[ChatGPT] Response={response['content']}")
             if response["completion_tokens"] > 0:
                 Session.save_session(response["content"], session_id, response["total_tokens"])
-            return response["content"]
+            return Reply(ReplyType.TEXT, response["content"])
 
     def reply_img(self, query):
         try:
             response = openai.Image.create(prompt=query, n=1, size="256x256")
             image_url = response["data"][0]["url"]
             logger.info(f"[ChatGPT] Image={image_url}")
-            return image_url
+            return Reply(ReplyType.IMAGE, image_url)
         except Exception as e:
             logger.error(f"[ChatGPT] Create image failed: {e}")
-            # TODO distinguish plaintext and image url
-            return "Image created failed"
+            return Reply(ReplyType.ERROR, "Image created failed")
 
     def reply_text(self, session):
         model = conf().get("model")
