@@ -87,6 +87,6 @@ Then fill in the configuration in `config.json`, the following is the descriptio
 python app.py
 ```
 
-<img width="1440" src="./docs/images/startup.png">
+<img width="1440" src="./docs/images/startup.svg">
 
 Voilà! Enjoy your exploring journey~
