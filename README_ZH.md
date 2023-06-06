@@ -105,7 +105,7 @@ python app.py
 
 欢迎提出 Contributions, issues 与 feature requests!<br />随时查看 [issues page](https://github.com/iuiaoin/wechat-gptbot/issues).
 
-## 🙏 感性支持
+## 🙏 感谢支持
 
 如果你喜欢这个项目的话，请为它点上一颗 ⭐️
 
