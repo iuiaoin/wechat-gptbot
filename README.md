@@ -18,6 +18,10 @@
 > A wechat robot based on ChatGPT with no risk, very stable! 🚀  
 > English | [中文文档](README_ZH.md)
 
+## 🎤 Introduction
+
+> When I use bots based on `itchat` and `wechaty`, I often encounter the risk of account restrictions when scanning codes to log in. Refer to [#158](https://github.com/AutumnWhj/ChatGPT-wechat-bot/issues/158). Is there a safe way to use wechat bots? Here it is~
+
 ## 🌟 Features
 
 - [x] **Extremely Stable：** Implement based on windows hook, no worry about risk of wechat account restriction
@@ -90,3 +94,22 @@ python app.py
 <img width="1440" src="./docs/images/shell.png">
 
 Voilà! Enjoy your exploring journey~
+
+## ✨ Contributor
+
+<a href="https://github.com/iuiaoin/wechat-gptbot/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=iuiaoin/wechat-gptbot" />
+</a>
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to
+check [issues page](https://github.com/iuiaoin/wechat-gptbot/issues).
+
+## 🙏 Show your support
+
+Give a ⭐️ if you like this project!
+
+## 📢 Announcements
+
+The WeChatSetup is coming from [wechat-windows-versions](https://github.com/tom-snow/wechat-windows-versions) and wechat-dll-injector from [wechat-bot](https://github.com/cixingguangming55555/wechat-bot), so you can use it without concern. Also thanks the two repo's owners for their contributions.
