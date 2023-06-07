@@ -112,4 +112,4 @@ Give a ⭐️ if you like this project!
 
 ## 📢 Announcements
 
-The WeChatSetup is coming from [wechat-windows-versions](https://github.com/tom-snow/wechat-windows-versions) and wechat-dll-injector from [wechat-bot](https://github.com/cixingguangming55555/wechat-bot), so you can use it without concern. Also thanks the two repo's owners for their contributions.
+The WeChatSetup is coming from [wechat-windows-versions](https://github.com/tom-snow/wechat-windows-versions/releases) and wechat-dll-injector from [wechat-bot](https://github.com/cixingguangming55555/wechat-bot), so you can use it without concern. Also thanks the two repo's owners for their contributions.
