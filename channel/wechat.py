@@ -71,6 +71,14 @@ class WeChatChannel:
         if "wxid" not in msg and msg["status"] == const.SUCCESS:
             logger.info("message sent successfully")
             return
+        # ignore message sent by self
+        logger.info("========")
+        logger.info(f"message received: {msg['id']}")
+        logger.info(f"personal wx_id: {self.personal_info['wx_id']}")
+        logger.info("=========")
+        if msg["id2"] == self.personal_info["wx_id"]:
+            logger.info("message sent by self, ignore")
+            return
         logger.info(f"message received: {msg}")
         if "@chatroom" in msg["wxid"]:
             self.handle_group(msg)
