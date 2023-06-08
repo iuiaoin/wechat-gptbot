@@ -75,10 +75,6 @@ class WeChatChannel:
         if msg["id2"] == self.personal_info["wx_id"]:
             logger.info("message sent by self, ignore")
             return
-        # ignore message sent by public/subscription account
-        if not is_wx_account(msg["wxid"]):
-            logger.info("message sent by public/subscription account, ignore")
-            return
         logger.info(f"message received: {msg}")
         if "@chatroom" in msg["wxid"]:
             self.handle_group(msg)
@@ -108,6 +104,10 @@ class WeChatChannel:
 
     def handle_single(self, msg):
         sender_id = msg["wxid"]
+        # ignore message sent by public/subscription account
+        if not is_wx_account(sender_id):
+            logger.info("message sent by public/subscription account, ignore")
+            return
         context = dict()
         context["session_id"] = sender_id
         query = msg["content"].strip()
