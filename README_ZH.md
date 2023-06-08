@@ -71,7 +71,8 @@ pip install -r requirements.txt
   "openai_api_base": "",                               # openai 服务使用的 api url
   "create_image_prefix": ["draw", "paint", "imagine"], # 开启图片回复的前缀
   "clear_current_session_command": "#clear session",   # 清楚当前对话记忆
-  "clear_all_sessions_command": "#clear all sessions"  # 清楚所有对话记忆
+  "clear_all_sessions_command": "#clear all sessions", # 清楚所有对话记忆
+  "chat_group_session_independent": false              # 群聊中的用户会话上下文是否是各自独立的
 }
 ```
 
