@@ -71,7 +71,8 @@ Then fill in the configuration in `config.json`, the following is the descriptio
   "openai_api_base": "",                               # api url used by openai service
   "create_image_prefix": ["draw", "paint", "imagine"], # Text prefix for image generation
   "clear_current_session_command": "#clear session",   # Clear current session
-  "clear_all_sessions_command": "#clear all sessions"  # Clear all sessions
+  "clear_all_sessions_command": "#clear all sessions", # Clear all sessions
+  "chat_group_session_independent": false              # Whether sessions of users are independent in chat group
 }
 ```
 
