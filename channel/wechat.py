@@ -10,7 +10,7 @@ from utils.gen import gen_id
 from bot.chatgpt import ChatGPTBot
 from common.singleton import singleton
 from config import conf
-from utils.check import check_prefix
+from utils.check import check_prefix, is_wx_account
 from common.reply import ReplyType
 import time
 
@@ -70,6 +70,14 @@ class WeChatChannel:
     def handle_message(self, msg):
         if "wxid" not in msg and msg["status"] == const.SUCCESS:
             logger.info("message sent successfully")
+            return
+        # ignore message sent by self
+        if msg["id2"] == self.personal_info["wx_id"]:
+            logger.info("message sent by self, ignore")
+            return
+        # ignore message sent by public/subscription account
+        if not is_wx_account(msg["wxid"]):
+            logger.info("message sent by public/subscription account, ignore")
             return
         logger.info(f"message received: {msg}")
         if "@chatroom" in msg["wxid"]:
