@@ -68,6 +68,7 @@ pip install -r requirements.txt
   "max_tokens": 1000,                                  # 对话记忆字符的最大 token 数量
   "temperature": 0.9,                                  # 在 0 到 2 之间. 更高的数值会使 chatGPT 的输出更加随机, 而较低的数值会使其更加稳定
   "proxy": "127.0.0.1:3000",                           # 代理客户端的ip和端口
+  "openai_api_base": "",                               # openai 服务使用的 api url
   "create_image_prefix": ["draw", "paint", "imagine"], # 开启图片回复的前缀
   "clear_current_session_command": "#clear session",   # 清楚当前对话记忆
   "clear_all_sessions_command": "#clear all sessions"  # 清楚所有对话记忆
