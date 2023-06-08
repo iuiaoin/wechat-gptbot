@@ -11,7 +11,10 @@ from common.reply import Reply, ReplyType
 class ChatGPTBot:
     def __init__(self):
         openai.api_key = conf().get("openai_api_key")
+        api_base = conf().get("openai_api_base")
         proxy = conf().get("proxy")
+        if api_base:
+            openai.api_base = api_base
         if proxy:
             openai.proxy = proxy
 
