@@ -69,10 +69,10 @@ class ChatGPTBot:
             result = {"completion_tokens": 0, "content": "Please ask me again"}
             if isinstance(e, openai.error.RateLimitError):
                 logger.warn(f"[ChatGPT] RateLimitError: {e}")
-                result["content"] = "Ask too frequently, please try again later"
+                result["content"] = "Ask too frequently, please try again in 20s"
             elif isinstance(e, openai.error.APIConnectionError):
                 logger.warn(f"[ChatGPT] APIConnectionError: {e}")
-                result["content"] = "I cannot connect the server, please check the network"
+                result["content"] = "I cannot connect the server, please check the network and try again"
             elif isinstance(e, openai.error.Timeout):
                 logger.warn(f"[ChatGPT] Timeout: {e}")
                 result["content"] = "I didn't receive your message, please try again"
