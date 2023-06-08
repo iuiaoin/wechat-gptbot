@@ -86,8 +86,15 @@ class WeChatChannel:
         sender_id = msg["id1"]
         query = msg["content"].strip()
         personal_name = self.personal_info["wx_name"]
+        session_independent = conf().get("chat_group_session_independent")
         context = dict()
-        context["session_id"] = room_id
+        context["session_id"] = sender_id if session_independent else room_id
+        logger.info("=========")
+        logger.info(session_independent)
+        logger.info(context["session_id"])
+        logger.info(sender_id)
+        logger.info(room_id)
+        logger.info("=========")
         sender_name = self.get_sender_name(room_id, sender_id)
         if query.startswith(f"@{personal_name}"):
             cooked_query = query.replace(f"@{personal_name}", "").strip()
