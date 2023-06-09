@@ -35,7 +35,7 @@
 
 支持 Windows 系统（以后可能会基于 [sandbox](https://github.com/huan/docker-wechat) 支持 Linux) 同时需要安装 `Python`
 
-> 建议 Python 版本在 3.8.X~3.10.X 之间, 推荐 3.8 版本
+> 建议 Python 版本在 3.8.X~3.10.X 之间, 推荐 3.10 版本
 
 #### 1. 克隆项目
 

@@ -35,7 +35,7 @@
 
 Support Windows system(probably support Linux in the future based on [sandbox](https://github.com/huan/docker-wechat)) and `Python` needs to be installed at the same time
 
-> It is recommended that the Python version be between 3.8.X~3.10.X, version 3.8 is perfect
+> It is recommended that the Python version be between 3.8.X~3.10.X, version 3.10 is perfect
 
 #### 1. Clone repo
 
