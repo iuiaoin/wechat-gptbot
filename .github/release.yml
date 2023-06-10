@@ -8,4 +8,4 @@ changelog:
         - enhancement 
     - title: Bug fix 🛠
       labels:
-        - "bug"
+        - bug
