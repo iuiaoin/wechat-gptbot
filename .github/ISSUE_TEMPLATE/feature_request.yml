@@ -1,0 +1,24 @@
+name: Feature request 🎉
+description: Propose your new idea or suggestion for the project
+title: "[Feat]: "
+labels: ["feature"]
+body:
+  - type: checkboxes
+    attributes:
+      label: Search for answers in existing issues
+      description: Please check existing issues [here](https://github.com/iuiaoin/wechat-gptbot/issues)
+      options:
+        - label: I have searched issues, there is no similar issue related
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature description
+      description: Describe the feature in detail, or provide relevant samples
+      placeholder: I have a proposal that enable wechat-gptbot to...
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Summarize your motivation and it may help us discover and come up with better solutions
+      placeholder: Without this feature, I cannot...

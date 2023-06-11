@@ -1,0 +1,54 @@
+name: Bug Report 🐞
+description: File a bug report about the project
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        #### Confirm in advance:
+        1. Have `git pull` the latest code
+        2. Python installed, version between 3.8.X~3.10.X
+        3. Dependencies installed via `pip install -r requirements.txt`
+        4. No missing configuration in `config.json`
+        5. No network issue(able to connect to openai server)
+  - type: checkboxes
+    attributes:
+      label: Search for answers in existing issues
+      description: Please check existing issues [here](https://github.com/iuiaoin/wechat-gptbot/issues)
+      options:
+        - label: I have searched issues, there is no issue related to the problem I encountered
+          required: true
+  - type: dropdown
+    id: python-version
+    attributes:
+      label: Python version
+      description: What version of python are you running?
+      options:
+        - python 3.8
+        - python 3.9
+        - python 3.10
+        - other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue description
+      description: Describe the problem in detail, or provide relevant screenshots
+      placeholder: A bug happened!
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: Repro steps
+      description: Summarize the steps that can repro your issue
+      placeholder: |
+        1. <step 1>
+        2. <step 2>
+        3. <step 3>
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
