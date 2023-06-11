@@ -73,6 +73,7 @@ Then fill in the configuration in `config.json`, the following is the descriptio
   "clear_current_session_command": "#clear session",   # Clear current session
   "clear_all_sessions_command": "#clear all sessions", # Clear all sessions
   "chat_group_session_independent": false              # Whether sessions of users are independent in chat group
+  "single_chat_prefix": ["bot", "@bot"]                # Start conversation with "bot" or "@bot" in single chat to trigger the bot, leave it empty if you wanna make the bot active all the time
 }
 ```
 
