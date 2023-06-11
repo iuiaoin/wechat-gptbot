@@ -112,7 +112,7 @@ class WeChatChannel:
         context = dict()
         context["session_id"] = sender_id
         query = msg["content"].strip()
-        single_chat_prefix = conf.get("single_chat_prefix")
+        single_chat_prefix = conf().get("single_chat_prefix")
         if single_chat_prefix is not None and len(single_chat_prefix) > 0:
             match_chat_prefix = check_prefix(query, single_chat_prefix)
             if match_chat_prefix is not None:
