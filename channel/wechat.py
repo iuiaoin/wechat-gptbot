@@ -91,7 +91,7 @@ class WeChatChannel:
         context["session_id"] = sender_id if session_independent else room_id
         sender_name = self.get_sender_name(room_id, sender_id)
         if query.startswith(f"@{personal_name}"):
-            cooked_query = query.replace(f"@{personal_name}", "").strip()
+            cooked_query = query.replace(f"@{personal_name}", "", 1).strip()
             create_image_prefix = conf().get("create_image_prefix")
             match_prefix = check_prefix(cooked_query, create_image_prefix)
             if match_prefix:
@@ -112,9 +112,17 @@ class WeChatChannel:
         context = dict()
         context["session_id"] = sender_id
         query = msg["content"].strip()
+        single_chat_prefix = conf().get("single_chat_prefix")
+        if single_chat_prefix is not None and len(single_chat_prefix) > 0:
+            match_chat_prefix = check_prefix(query, single_chat_prefix)
+            if match_chat_prefix is not None:
+                query = query.replace(match_chat_prefix, "", 1).strip()
+            else:
+                logger.info("your message is not start with single_chat_prefix, ignore")
+                return
         create_image_prefix = conf().get("create_image_prefix")
-        match_prefix = check_prefix(query, create_image_prefix)
-        if match_prefix:
+        match_image_prefix = check_prefix(query, create_image_prefix)
+        if match_image_prefix:
             context["type"] = const.CREATE_IMAGE
         reply = ChatGPTBot().reply(query, context)
         if reply.type == ReplyType.IMAGE:
