@@ -72,8 +72,9 @@ pip install -r requirements.txt
   "create_image_prefix": ["draw", "paint", "imagine"], # 开启图片回复的前缀
   "clear_current_session_command": "#clear session",   # 清楚当前对话记忆
   "clear_all_sessions_command": "#clear all sessions", # 清楚所有对话记忆
-  "chat_group_session_independent": false              # 群聊中的用户会话上下文是否是各自独立的
-  "single_chat_prefix": ["bot", "@bot"]                # 在私聊中以“bot”或“@bot”开始对话以触发机器人，如果你想让bot一直处于激活状态，请将其留空
+  "chat_group_session_independent": false,             # 群聊中的用户会话上下文是否是各自独立的
+  "single_chat_prefix": ["bot", "@bot"],               # 在私聊中以“bot”或“@bot”开始对话以触发机器人，如果你想让bot一直处于激活状态，请将其留空
+  "query_key_command": "#query key",                   # 查询apiKey使用情况
 }
 ```
 
