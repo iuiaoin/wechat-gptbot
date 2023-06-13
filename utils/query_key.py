@@ -2,17 +2,16 @@ import datetime
 import requests
 from config import conf
 
-class QueryKey(object) :
 
+class QueryKey(object):
     def get_key():
         api_base = conf().get("openai_api_base")
         if api_base:
             api_base = api_base
         else:
             api_base = "https://api.openai.com/v1"
-        subscription_url = api_base+"/dashboard/billing/subscription"
-        headers = {"Authorization": "Bearer " + conf().get("openai_api_key"),
-                "Content-Type": "application/json"}
+        subscription_url = api_base + "/dashboard/billing/subscription"
+        headers = {"Authorization": "Bearer " + conf().get("openai_api_key"), "Content-Type": "application/json"}
         subscription_response = requests.get(subscription_url, headers=headers)
         if subscription_response.status_code == 200:
             data = subscription_response.json()
@@ -42,7 +41,9 @@ class QueryKey(object) :
         else:
             return billing_response.text
 
-        return f"## Total:\t{total:.2f}$  \n" \
-               f"## Used:\t{total_usage:.2f}$  \n" \
-               f"## Remaining:\t{total - total_usage:.2f}$  \n" \
-               f"\n" + recent
+        return (
+            f"## Total:\t{total:.2f}$  \n"
+            f"## Used:\t{total_usage:.2f}$  \n"
+            f"## Remaining:\t{total - total_usage:.2f}$  \n"
+            f"\n" + recent
+        )

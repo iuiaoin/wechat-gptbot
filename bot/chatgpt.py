@@ -5,7 +5,7 @@ from utils.log import logger
 from common.session import Session
 from utils import const
 from common.reply import Reply, ReplyType
-from utils.queryKey import QueryKey
+from utils.query_key import QueryKey
 
 
 @singleton

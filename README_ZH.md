@@ -74,7 +74,8 @@ pip install -r requirements.txt
   "clear_all_sessions_command": "#clear all sessions", # 清楚所有对话记忆
   "chat_group_session_independent": false,             # 群聊中的用户会话上下文是否是各自独立的
   "single_chat_prefix": ["bot", "@bot"],               # 在私聊中以“bot”或“@bot”开始对话以触发机器人，如果你想让bot一直处于激活状态，请将其留空
-  "query_key_command": "#query key",                   # 查询apiKey使用情况
+  "query_key_command": "#query key",                   # 查询 api key 使用情况
+  "recent_days": 5                                     # 查询最近的<recent_days>天
 }
 ```
 

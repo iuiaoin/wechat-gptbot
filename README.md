@@ -74,7 +74,8 @@ Then fill in the configuration in `config.json`, the following is the descriptio
   "clear_all_sessions_command": "#clear all sessions", # Clear all sessions
   "chat_group_session_independent": false,             # Whether sessions of users are independent in chat group
   "single_chat_prefix": ["bot", "@bot"],               # Start conversation with "bot" or "@bot" in single chat to trigger the bot, leave it empty if you wanna make the bot active all the time
-  "query_key_command": "#query key"                   # Querying the usage of the API key.
+  "query_key_command": "#query key"                    # Querying the usage of the api key
+  "recent_days": 5                                     # The usage in <recent_days> days
 }
 ```
 
