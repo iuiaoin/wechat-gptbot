@@ -3,3 +3,4 @@
 __pycache__
 config.json
 assets/*.png
+.ruff_cache
