@@ -14,7 +14,7 @@
     "hr_negative_prompt": "",
     "prompt": "",
     "styles": [
-        "string"
+        ""
     ],
     "seed": -1,
     "subseed": -1,

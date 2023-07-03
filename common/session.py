@@ -1,6 +1,9 @@
 from common.expired_dict import ExpiredDict
 from config import conf
 
+with open('role.txt', mode="r", encoding="utf-8") as f:
+    data = f.read()
+    default_prompt = data
 
 class Session(object):
     all_sessions = ExpiredDict(conf().get("session_expired_duration") or 3600)
@@ -21,7 +24,7 @@ class Session(object):
         """
         session = Session.all_sessions.get(session_id, [])
         if len(session) == 0:
-            system_prompt = conf().get("role_desc")
+            system_prompt = default_prompt #conf().get("role_desc")
             system_item = {"role": "system", "content": system_prompt}
             session.append(system_item)
             Session.all_sessions[session_id] = session

@@ -6,6 +6,7 @@ from common.session import Session
 from utils import const
 from common.reply import Reply, ReplyType
 from utils.query_key import QueryKey
+from draw.stable_draw import translate
 
 
 @singleton
@@ -22,7 +23,8 @@ class ChatGPTBot:
     def reply(self, query, context=None):
         logger.info(f"[ChatGPT] Query={query}")
         if context.get("type", None) == const.CREATE_IMAGE:
-            return self.reply_img(query)
+            trans = translate(query.replace("draw",""))
+            return self.reply_img(trans)
         else:
             session_id = context.get("session_id")
             clear_session_command = conf().get("clear_session_command") or "#clear session"
