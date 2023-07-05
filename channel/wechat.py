@@ -14,7 +14,7 @@ from utils.check import check_prefix, is_wx_account
 from common.reply import ReplyType
 import time
 import base64
-from draw.stable_draw import send_stable_img
+from draw.stable_draw import send_stable_img,send_erciyuan_stable_img,send_erciyuan_room_stable_img
 
 @singleton
 class WeChatChannel:
@@ -95,11 +95,15 @@ class WeChatChannel:
         if self.personal_info["wx_id"] in atlist:
             cooked_query = query.replace(f"@{personal_name}", "", 1).strip()
             create_image_prefix = conf().get("create_image_prefix")
-            match_prefix = check_prefix(cooked_query, create_image_prefix)
-            if match_prefix:
+            erciyuan_image_prefix = conf().get("erciyuan_image_prefix")
+            match_image_prefix = check_prefix(cooked_query, create_image_prefix)
+            match_erciyuan_prefix = check_prefix(cooked_query, erciyuan_image_prefix)
+            if match_image_prefix:
                 context["type"] = const.CREATE_IMAGE
-            if match_prefix:
                 send_stable_img(self,query, room_id)
+            elif match_erciyuan_prefix:
+                context["type"] = const.CREATE_IMAGE
+                send_erciyuan_room_stable_img(self, room_id,sender_id,sender_name)
             else:                
                 reply = ChatGPTBot().reply(cooked_query, context)
                 if reply.type == ReplyType.IMAGE:
@@ -127,10 +131,14 @@ class WeChatChannel:
                 return
         create_image_prefix = conf().get("create_image_prefix")
         match_image_prefix = check_prefix(query, create_image_prefix)
+        erciyuan_image_prefix = conf().get("erciyuan_image_prefix")
+        match_erciyuan_prefix = check_prefix(query, erciyuan_image_prefix)    
         if match_image_prefix:
             context["type"] = const.CREATE_IMAGE
-        if match_image_prefix:
             send_stable_img(self,query, sender_id)
+        elif match_erciyuan_prefix:
+            context["type"] = const.CREATE_IMAGE
+            send_erciyuan_stable_img(self, sender_id,sender_id,'你')            
         else:
             reply = ChatGPTBot().reply(query, context)
             if reply.type == ReplyType.IMAGE:
