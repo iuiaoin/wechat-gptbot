@@ -8,6 +8,7 @@ from utils import const
 import os
 from utils.gen import gen_id
 from bot.chatgpt import ChatGPTBot
+from bot.claudeapi import ClaudeAPIBot
 from common.singleton import singleton
 from config import conf
 from utils.check import check_prefix, is_wx_account
@@ -140,7 +141,7 @@ class WeChatChannel:
             context["type"] = const.CREATE_IMAGE
             send_erciyuan_stable_img(self, sender_id,sender_id,'你')            
         else:
-            reply = ChatGPTBot().reply(query, context)
+            reply = ClaudeAPIBot().reply(query, context)
             if reply.type == ReplyType.IMAGE:
                 self.send_img(reply.content, sender_id)
             else:

@@ -70,7 +70,7 @@ def send_stable_img(wx_plugin,tags,wxid):
 
         print(translation.origin, ' -> ', translation.text)
 
-        send_cn_stable_img(wx_plugin,translate.text,wxid)
+        send_cn_stable_img(wx_plugin,translation.text,wxid)
 
 
     except Exception as e:
@@ -85,7 +85,7 @@ def send_erciyuan_stable_img(wx_plugin,wx_id,sender_id,sender_name):
     wx_plugin.ws.send(reply_msg)
 
 def send_erciyuan_room_stable_img(wx_plugin,room_id,sender_id,sender_name):
-    reply_msg = wx_plugin.build_msg("正在给你画，么慌", wxid=sender_id)
+    reply_msg = wx_plugin.build_msg("正在给你画，么慌", wxid=sender_id, room_id=room_id, nickname=sender_name)
     wx_plugin.ws.send(reply_msg)
     tags = getdesc(sender_id,sender_name)
     send_cn_stable_img(wx_plugin,tags['en'],room_id)
