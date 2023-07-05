@@ -31,6 +31,8 @@ class WeChatChannel:
             on_error=self.on_error,
             on_close=self.on_close,
         )
+        self.chat_mode = conf().get("chat_mode")
+
 
     def startup(self):
         logger.info("App startup successfully!")
@@ -106,7 +108,10 @@ class WeChatChannel:
                 context["type"] = const.CREATE_IMAGE
                 send_erciyuan_room_stable_img(self, room_id,sender_id,sender_name)
             else:                
-                reply = ChatGPTBot().reply(cooked_query, context)
+                if self.chat_mode=='claude_api':
+                    reply = ClaudeAPIBot().reply(cooked_query, context)                
+                else:
+                    reply = ChatGPTBot().reply(cooked_query, context)
                 if reply.type == ReplyType.IMAGE:
                     self.send_img(reply.content, room_id)
                 else:
@@ -141,7 +146,10 @@ class WeChatChannel:
             context["type"] = const.CREATE_IMAGE
             send_erciyuan_stable_img(self, sender_id,sender_id,'你')            
         else:
-            reply = ClaudeAPIBot().reply(query, context)
+            if self.chat_mode=='claude_api':
+                reply = ClaudeAPIBot().reply(query, context)            
+            else:
+                reply = ChatGPTBot().reply(query, context)
             if reply.type == ReplyType.IMAGE:
                 self.send_img(reply.content, sender_id)
             else:

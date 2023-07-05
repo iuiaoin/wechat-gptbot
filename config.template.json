@@ -1,4 +1,5 @@
 {
+  "chat_mode":"chatgpt_api",
   "openai_api_key": "YOUR API SECRET KEY",
   "model": "gpt-3.5-turbo",
   "role_desc": "You are a helpful assistant.",
@@ -13,5 +14,10 @@
   "chat_group_session_independent": false,
   "single_chat_prefix": ["bot", "@bot"],
   "query_key_command": "#query key",
-  "recent_days": 5
+  "recent_days": 5,
+  "stable_diffustion":"http://127.0.0.1:7860",
+  "erciyuan_image_prefix":["二次元的我"],
+  "claude_api_key":"",
+  "claude_model":"claude-v1",
+  "claude_max_tokens":1000
 }

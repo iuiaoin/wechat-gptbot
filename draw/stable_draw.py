@@ -4,6 +4,8 @@ import time
 import base64
 import json
 import requests
+from config import conf
+
 from utils.log import logger
 from utils.erciyuan import getdesc
 translator = Translator()
@@ -35,7 +37,7 @@ def send_cn_stable_img(wx_plugin,tags,wxid):
 
         try:
             headers = {'Content-Type': 'application/json', 'Authorization':''}
-            response = requests.post('http://127.0.0.1:7860/sdapi/v1/txt2img', data=json.dumps(aidraw['text2image']),headers=headers)
+            response = requests.post(conf().get("stable_diffustion") + '/sdapi/v1/txt2img', data=json.dumps(aidraw['text2image']),headers=headers)
             response.raise_for_status()  # 检查响应状态码
 
             # 从响应中获取数据
