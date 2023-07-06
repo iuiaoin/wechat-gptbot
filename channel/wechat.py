@@ -102,12 +102,18 @@ class WeChatChannel:
             match_image_prefix = check_prefix(cooked_query, create_image_prefix)
             match_erciyuan_prefix = check_prefix(cooked_query, erciyuan_image_prefix)
             if match_image_prefix:
+                if conf().get("only_boss") ==1 and conf().get("boss_id") != sender_id:
+                    logger.info("message not sent by boss account , ignore")
+                    return                
                 context["type"] = const.CREATE_IMAGE
                 send_stable_img(self,query, room_id)
             elif match_erciyuan_prefix:
                 context["type"] = const.CREATE_IMAGE
                 send_erciyuan_room_stable_img(self, room_id,sender_id,sender_name)
-            else:                
+            else:     
+                if conf().get("only_boss") ==1 and conf().get("boss_id") != sender_id:
+                    logger.info("message not sent by boss account , ignore")
+                    return                           
                 if self.chat_mode=='claude_api':
                     reply = ClaudeAPIBot().reply(cooked_query, context)                
                 else:
