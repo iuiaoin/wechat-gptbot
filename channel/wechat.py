@@ -6,16 +6,15 @@ import requests
 from utils.log import logger
 from utils import const
 import os
-from utils.gen import gen_id
 from bot.chatgpt import ChatGPTBot
 from common.singleton import singleton
 from config import conf
 from utils.check import check_prefix, is_wx_account
-from common.reply import ReplyType
-import time
+from common.reply import ReplyType, Reply
 from channel.message import Message
-from utils.api import get_personal_info
+from utils.api import get_personal_info, send_image
 from utils.const import MessageType
+from utils.serialize import serialize_img, serialize_text
 
 
 @singleton
@@ -102,16 +101,7 @@ class WeChatChannel:
             if match_prefix:
                 context["type"] = const.CREATE_IMAGE
             reply = ChatGPTBot().reply(query, context)
-            if reply.type == ReplyType.IMAGE:
-                self.send_img(reply.content, msg.room_id)
-            else:
-                reply_msg = self.build_msg(
-                    reply.content,
-                    wxid=msg.sender_id,
-                    room_id=msg.room_id,
-                    nickname=msg.sender_name,
-                )
-                self.ws.send(reply_msg)
+            self.send(reply, msg)
 
     def handle_single(self, msg: Message):
         # ignore message sent by public/subscription account
@@ -134,62 +124,16 @@ class WeChatChannel:
         if match_image_prefix:
             context["type"] = const.CREATE_IMAGE
         reply = ChatGPTBot().reply(query, context)
+        self.send(reply, msg)
+
+    def send(self, reply: Reply, msg: Message):
         if reply.type == ReplyType.IMAGE:
-            self.send_img(reply.content, msg.sender_id)
+            img_path = serialize_img(reply.content)
+            wx_id = msg.room_id if msg.is_group else msg.sender_id
+            send_image(img_path, wx_id)
         else:
-            reply_msg = self.build_msg(reply.content, wxid=msg.sender_id)
+            reply_msg = serialize_text(reply.content, msg)
             self.ws.send(reply_msg)
-
-    def send_img(self, image_url, wxid):
-        try:
-            # download image
-            path = os.path.abspath("./assets")
-            img_name = int(time.time() * 1000)
-            response = requests.get(image_url, stream=True)
-            response.raise_for_status()  # Raise exception if invalid response
-
-            with open(f"{path}\\{img_name}.png", "wb+") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
-                f.close()
-            img_path = os.path.abspath(f"{path}\\{img_name}.png").replace("\\", "\\\\")
-
-            data = {
-                "id": gen_id(),
-                "type": MessageType.PIC_MSG.value,
-                "roomid": "null",
-                "content": img_path,
-                "wxid": wxid,
-                "nickname": "null",
-                "ext": "null",
-            }
-            url = f"http://{const.IP}:{const.PORT}/api/sendpic"
-            res = requests.post(url, json={"para": data}, timeout=5)
-            if res.status_code == 200 and res.json()["status"] == const.SUCCESS:
-                logger.info("image sent successfully")
-            else:
-                logger.error(f"[Server Error]: {res.text}")
-        except Exception as e:
-            logger.error(f"[Download Image Error]: {e}")
-
-    def build_msg(self, content, wxid="null", room_id=None, nickname="null"):
-        if room_id:
-            msg_type = MessageType.AT_MSG.value
-        else:
-            msg_type = MessageType.TXT_MSG.value
-        if room_id is None:
-            room_id = "null"
-        msg = {
-            "id": gen_id(),
-            "type": msg_type,
-            "roomid": room_id,
-            "wxid": wxid,
-            "content": content,
-            "nickname": nickname,
-            "ext": "null",
-        }
-        return json.dumps(msg)
 
     def on_open(self, ws):
         logger.info("[Websocket] connected")
