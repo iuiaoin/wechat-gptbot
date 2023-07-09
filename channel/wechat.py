@@ -13,6 +13,9 @@ from config import conf
 from utils.check import check_prefix, is_wx_account
 from common.reply import ReplyType
 import time
+from channel.message import Message
+from utils.api import get_personal_info
+from utils.const import MessageType
 
 
 @singleton
@@ -21,7 +24,7 @@ class WeChatChannel:
         requests.packages.urllib3.disable_warnings()
         warnings.filterwarnings("ignore")
         os.environ["TF_CPP_MIN_LOG_LEVEL"] = "1"
-        self.personal_info = self.get_personal_info()
+        self.personal_info = get_personal_info()
         self.ws = websocket.WebSocketApp(
             const.SERVER,
             on_open=self.on_open,
@@ -35,84 +38,89 @@ class WeChatChannel:
         self.ws.run_forever()
 
     def on_message(self, ws, message):
-        msg = json.loads(message)
-        msg_type = msg["type"]
+        raw_msg = json.loads(message)
+        msg_type = raw_msg["type"]
         handlers = {
-            const.AT_MSG: self.handle_message,
-            const.TXT_MSG: self.handle_message,
-            const.PIC_MSG: self.handle_message,
-            const.RECV_PIC_MSG: self.handle_message,
-            const.RECV_TXT_MSG: self.handle_message,
-            const.RECV_TXT_CITE_MSG: self.handle_cite_message,
-            const.HEART_BEAT: self.noop,
+            MessageType.AT_MSG.value: self.handle_message,
+            MessageType.TXT_MSG.value: self.handle_message,
+            MessageType.PIC_MSG.value: self.handle_message,
+            MessageType.RECV_PIC_MSG.value: self.handle_message,
+            MessageType.RECV_TXT_MSG.value: self.handle_message,
+            MessageType.RECV_TXT_CITE_MSG.value: self.handle_cite_message,
+            MessageType.HEART_BEAT.value: self.noop,
         }
-        handlers.get(msg_type, logger.info)(msg)
+        handlers.get(msg_type, logger.info)(raw_msg)
 
-    def noop(self, msg):
+    def noop(self, raw_msg):
         pass
 
-    def handle_cite_message(self, msg):
-        xml_msg = msg["content"]["content"].replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+    def handle_cite_message(self, raw_msg):
+        xml_msg = (
+            raw_msg["content"]["content"]
+            .replace("&amp;", "&")
+            .replace("&lt;", "<")
+            .replace("&gt;", ">")
+        )
         soup = BeautifulSoup(xml_msg, "lxml")
         cooked_msg = {
             "content": soup.select_one("title").text,
-            "id": msg["id"],
-            "id1": msg["content"]["id2"],
+            "id": raw_msg["id"],
+            "id1": raw_msg["content"]["id2"],
             "id2": "",
             "id3": "",
-            "srvid": msg["srvid"],
-            "time": msg["time"],
-            "type": msg["type"],
-            "wxid": msg["content"]["id1"],
+            "srvid": raw_msg["srvid"],
+            "time": raw_msg["time"],
+            "type": raw_msg["type"],
+            "wxid": raw_msg["content"]["id1"],
         }
         self.handle_message(cooked_msg)
 
-    def handle_message(self, msg):
-        if "wxid" not in msg and msg["status"] == const.SUCCESS:
+    def handle_message(self, raw_msg):
+        if "wxid" not in raw_msg and raw_msg["status"] == const.SUCCESS:
             logger.info("message sent successfully")
             return
         # ignore message sent by self
-        if msg["id2"] == self.personal_info["wx_id"]:
+        if raw_msg["id2"] == self.personal_info["wx_id"]:
             logger.info("message sent by self, ignore")
             return
+        msg = Message(raw_msg, self.personal_info)
         logger.info(f"message received: {msg}")
-        if "@chatroom" in msg["wxid"]:
+        # did receive message
+        if msg.is_group:
             self.handle_group(msg)
         else:
             self.handle_single(msg)
 
-    def handle_group(self, msg):
-        room_id = msg["wxid"]
-        sender_id = msg["id1"]
-        query = msg["content"].strip()
-        personal_name = self.personal_info["wx_name"]
+    def handle_group(self, msg: Message):
         session_independent = conf().get("chat_group_session_independent")
         context = dict()
-        context["session_id"] = sender_id if session_independent else room_id
-        sender_name = self.get_sender_name(room_id, sender_id)
-        atlist = msg["id3"]
-        if self.personal_info["wx_id"] in atlist:
-            cooked_query = query.replace(f"@{personal_name}", "", 1).strip()
+        context["session_id"] = msg.sender_id if session_independent else msg.room_id
+        if msg.is_at:
+            query = msg.content.replace(f"@{msg.receiver_name}", "", 1).strip()
             create_image_prefix = conf().get("create_image_prefix")
-            match_prefix = check_prefix(cooked_query, create_image_prefix)
+            match_prefix = check_prefix(query, create_image_prefix)
             if match_prefix:
                 context["type"] = const.CREATE_IMAGE
-            reply = ChatGPTBot().reply(cooked_query, context)
+            reply = ChatGPTBot().reply(query, context)
             if reply.type == ReplyType.IMAGE:
-                self.send_img(reply.content, room_id)
+                self.send_img(reply.content, msg.room_id)
             else:
-                reply_msg = self.build_msg(reply.content, wxid=sender_id, room_id=room_id, nickname=sender_name)
+                reply_msg = self.build_msg(
+                    reply.content,
+                    wxid=msg.sender_id,
+                    room_id=msg.room_id,
+                    nickname=msg.sender_name,
+                )
                 self.ws.send(reply_msg)
 
-    def handle_single(self, msg):
-        sender_id = msg["wxid"]
+    def handle_single(self, msg: Message):
         # ignore message sent by public/subscription account
-        if not is_wx_account(sender_id):
+        if not is_wx_account(msg.sender_id):
             logger.info("message sent by public/subscription account, ignore")
             return
         context = dict()
-        context["session_id"] = sender_id
-        query = msg["content"].strip()
+        context["session_id"] = msg.sender_id
+        query = msg.content
         single_chat_prefix = conf().get("single_chat_prefix")
         if single_chat_prefix is not None and len(single_chat_prefix) > 0:
             match_chat_prefix = check_prefix(query, single_chat_prefix)
@@ -127,17 +135,17 @@ class WeChatChannel:
             context["type"] = const.CREATE_IMAGE
         reply = ChatGPTBot().reply(query, context)
         if reply.type == ReplyType.IMAGE:
-            self.send_img(reply.content, sender_id)
+            self.send_img(reply.content, msg.sender_id)
         else:
-            reply_msg = self.build_msg(reply.content, wxid=sender_id)
+            reply_msg = self.build_msg(reply.content, wxid=msg.sender_id)
             self.ws.send(reply_msg)
 
-    def send_img(self, content, wxid):
+    def send_img(self, image_url, wxid):
         try:
             # download image
             path = os.path.abspath("./assets")
             img_name = int(time.time() * 1000)
-            response = requests.get(content, stream=True)
+            response = requests.get(image_url, stream=True)
             response.raise_for_status()  # Raise exception if invalid response
 
             with open(f"{path}\\{img_name}.png", "wb+") as f:
@@ -149,7 +157,7 @@ class WeChatChannel:
 
             data = {
                 "id": gen_id(),
-                "type": const.PIC_MSG,
+                "type": MessageType.PIC_MSG.value,
                 "roomid": "null",
                 "content": img_path,
                 "wxid": wxid,
@@ -167,9 +175,9 @@ class WeChatChannel:
 
     def build_msg(self, content, wxid="null", room_id=None, nickname="null"):
         if room_id:
-            msg_type = const.AT_MSG
+            msg_type = MessageType.AT_MSG.value
         else:
-            msg_type = const.TXT_MSG
+            msg_type = MessageType.TXT_MSG.value
         if room_id is None:
             room_id = "null"
         msg = {
@@ -182,54 +190,6 @@ class WeChatChannel:
             "ext": "null",
         }
         return json.dumps(msg)
-
-    def get_personal_info(self):
-        uri = "/api/get_personal_info"
-        data = {
-            "id": gen_id(),
-            "type": const.PERSONAL_INFO,
-            "content": "op:personal info",
-            "wxid": "null",
-        }
-        try:
-            response = self.fetch(uri, data)
-            content = json.loads(response["content"])
-            logger.info(
-                f"""
-                wechat login info:
-                
-                nickName: {content['wx_name']}
-                account: {content['wx_code']}
-                wechatId: {content['wx_id']}
-                startTime: {response['time']}
-                """
-            )
-            return content
-        except Exception as e:
-            logger.error("Get personal info failed!")
-            logger.exception(e)
-
-    # get sender's nickname in group chat
-    def get_sender_name(self, room_id, wxid):
-        uri = "api/getmembernick"
-        data = {"type": const.CHATROOM_MEMBER_NICK, "wxid": wxid, "roomid": room_id or "null"}
-        response = self.fetch(uri, data)
-        return json.loads(response["content"])["nick"]
-
-    def fetch(self, uri, data):
-        base_data = {
-            "id": gen_id(),
-            "type": "null",
-            "roomid": "null",
-            "wxid": "null",
-            "content": "null",
-            "nickname": "null",
-            "ext": "null",
-        }
-        base_data.update(data)
-        url = f"http://{const.IP}:{const.PORT}/{uri}"
-        response = requests.post(url, json={"para": base_data}, timeout=5)
-        return response.json()
 
     def on_open(self, ws):
         logger.info("[Websocket] connected")
