@@ -67,7 +67,7 @@ def send_image(img_path, wx_id):
         "wxid": wx_id,
     }
     response = fetch(path, data)
-    if response.status_code == 200 and response.json()["status"] == const.SUCCESS:
+    if response["status"] == const.SUCCESS:
         logger.info("image sent successfully")
     else:
         logger.error(f"[Server Error]: {response.text}")
