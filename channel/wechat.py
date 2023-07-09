@@ -13,8 +13,9 @@ from config import conf
 from utils.check import check_prefix, is_wx_account
 from common.reply import ReplyType
 import time
-from message import Message
+from channel.message import Message
 from utils.api import get_personal_info
+from utils.const import MessageType
 
 
 @singleton
@@ -40,13 +41,13 @@ class WeChatChannel:
         raw_msg = json.loads(message)
         msg_type = raw_msg["type"]
         handlers = {
-            const.AT_MSG: self.handle_message,
-            const.TXT_MSG: self.handle_message,
-            const.PIC_MSG: self.handle_message,
-            const.RECV_PIC_MSG: self.handle_message,
-            const.RECV_TXT_MSG: self.handle_message,
-            const.RECV_TXT_CITE_MSG: self.handle_cite_message,
-            const.HEART_BEAT: self.noop,
+            MessageType.AT_MSG.value: self.handle_message,
+            MessageType.TXT_MSG.value: self.handle_message,
+            MessageType.PIC_MSG.value: self.handle_message,
+            MessageType.RECV_PIC_MSG.value: self.handle_message,
+            MessageType.RECV_TXT_MSG.value: self.handle_message,
+            MessageType.RECV_TXT_CITE_MSG.value: self.handle_cite_message,
+            MessageType.HEART_BEAT.value: self.noop,
         }
         handlers.get(msg_type, logger.info)(raw_msg)
 
@@ -156,7 +157,7 @@ class WeChatChannel:
 
             data = {
                 "id": gen_id(),
-                "type": const.PIC_MSG,
+                "type": MessageType.PIC_MSG.value,
                 "roomid": "null",
                 "content": img_path,
                 "wxid": wxid,
@@ -174,9 +175,9 @@ class WeChatChannel:
 
     def build_msg(self, content, wxid="null", room_id=None, nickname="null"):
         if room_id:
-            msg_type = const.AT_MSG
+            msg_type = MessageType.AT_MSG.value
         else:
-            msg_type = const.TXT_MSG
+            msg_type = MessageType.TXT_MSG.value
         if room_id is None:
             room_id = "null"
         msg = {

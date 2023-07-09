@@ -1,8 +1,9 @@
-import const
-from gen import gen_id
+from utils import const
+from utils.gen import gen_id
 import requests
 import json
-from log import logger
+from utils.log import logger
+from utils.const import MessageType
 
 
 def fetch(uri, data):
@@ -21,16 +22,16 @@ def fetch(uri, data):
     return response.json()
 
 
-def get_personal_info(self):
+def get_personal_info():
     uri = "/api/get_personal_info"
     data = {
         "id": gen_id(),
-        "type": const.PERSONAL_INFO,
+        "type": MessageType.PERSONAL_INFO.value,
         "content": "op:personal info",
         "wxid": "null",
     }
     try:
-        response = self.fetch(uri, data)
+        response = fetch(uri, data)
         content = json.loads(response["content"])
         logger.info(
             f"""
@@ -52,7 +53,7 @@ def get_personal_info(self):
 def get_sender_name(room_id, sender_id):
     uri = "api/getmembernick"
     data = {
-        "type": const.CHATROOM_MEMBER_NICK,
+        "type": MessageType.CHATROOM_MEMBER_NICK.value,
         "wxid": sender_id,
         "roomid": room_id or "null",
     }
