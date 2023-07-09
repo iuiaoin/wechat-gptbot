@@ -8,12 +8,14 @@ from utils import const
 import os
 from utils.gen import gen_id
 from bot.chatgpt import ChatGPTBot
+from bot.claudeapi import ClaudeAPIBot
 from common.singleton import singleton
 from config import conf
 from utils.check import check_prefix, is_wx_account
 from common.reply import ReplyType
 import time
-
+import base64
+from draw.stable_draw import send_stable_img,send_erciyuan_stable_img,send_erciyuan_room_stable_img
 
 @singleton
 class WeChatChannel:
@@ -29,6 +31,8 @@ class WeChatChannel:
             on_error=self.on_error,
             on_close=self.on_close,
         )
+        self.chat_mode = conf().get("chat_mode")
+
 
     def startup(self):
         logger.info("App startup successfully!")
@@ -94,15 +98,31 @@ class WeChatChannel:
         if self.personal_info["wx_id"] in atlist:
             cooked_query = query.replace(f"@{personal_name}", "", 1).strip()
             create_image_prefix = conf().get("create_image_prefix")
-            match_prefix = check_prefix(cooked_query, create_image_prefix)
-            if match_prefix:
+            erciyuan_image_prefix = conf().get("erciyuan_image_prefix")
+            match_image_prefix = check_prefix(cooked_query, create_image_prefix)
+            match_erciyuan_prefix = check_prefix(cooked_query, erciyuan_image_prefix)
+            if match_image_prefix:
+                if conf().get("only_boss") ==1 and conf().get("boss_id") != sender_id:
+                    logger.info("message not sent by boss account , ignore")
+                    return                
                 context["type"] = const.CREATE_IMAGE
-            reply = ChatGPTBot().reply(cooked_query, context)
-            if reply.type == ReplyType.IMAGE:
-                self.send_img(reply.content, room_id)
-            else:
-                reply_msg = self.build_msg(reply.content, wxid=sender_id, room_id=room_id, nickname=sender_name)
-                self.ws.send(reply_msg)
+                send_stable_img(self,query, room_id)
+            elif match_erciyuan_prefix:
+                context["type"] = const.CREATE_IMAGE
+                send_erciyuan_room_stable_img(self, room_id,sender_id,sender_name)
+            else:     
+                if conf().get("only_boss") ==1 and conf().get("boss_id") != sender_id:
+                    logger.info("message not sent by boss account , ignore")
+                    return                           
+                if self.chat_mode=='claude_api':
+                    reply = ClaudeAPIBot().reply(cooked_query, context)                
+                else:
+                    reply = ChatGPTBot().reply(cooked_query, context)
+                if reply.type == ReplyType.IMAGE:
+                    self.send_img(reply.content, room_id)
+                else:
+                    reply_msg = self.build_msg(reply.content, wxid=sender_id, room_id=room_id, nickname=sender_name)
+                    self.ws.send(reply_msg)
 
     def handle_single(self, msg):
         sender_id = msg["wxid"]
@@ -123,30 +143,27 @@ class WeChatChannel:
                 return
         create_image_prefix = conf().get("create_image_prefix")
         match_image_prefix = check_prefix(query, create_image_prefix)
+        erciyuan_image_prefix = conf().get("erciyuan_image_prefix")
+        match_erciyuan_prefix = check_prefix(query, erciyuan_image_prefix)    
         if match_image_prefix:
             context["type"] = const.CREATE_IMAGE
-        reply = ChatGPTBot().reply(query, context)
-        if reply.type == ReplyType.IMAGE:
-            self.send_img(reply.content, sender_id)
+            send_stable_img(self,query, sender_id)
+        elif match_erciyuan_prefix:
+            context["type"] = const.CREATE_IMAGE
+            send_erciyuan_stable_img(self, sender_id,sender_id,'你')            
         else:
-            reply_msg = self.build_msg(reply.content, wxid=sender_id)
-            self.ws.send(reply_msg)
+            if self.chat_mode=='claude_api':
+                reply = ClaudeAPIBot().reply(query, context)            
+            else:
+                reply = ChatGPTBot().reply(query, context)
+            if reply.type == ReplyType.IMAGE:
+                self.send_img(reply.content, sender_id)
+            else:
+                reply_msg = self.build_msg(reply.content, wxid=sender_id)
+                self.ws.send(reply_msg)
 
-    def send_img(self, content, wxid):
+    def send_image_path(self,img_path,wxid):
         try:
-            # download image
-            path = os.path.abspath("./assets")
-            img_name = int(time.time() * 1000)
-            response = requests.get(content, stream=True)
-            response.raise_for_status()  # Raise exception if invalid response
-
-            with open(f"{path}\\{img_name}.png", "wb+") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
-                f.close()
-            img_path = os.path.abspath(f"{path}\\{img_name}.png").replace("\\", "\\\\")
-
             data = {
                 "id": gen_id(),
                 "type": const.PIC_MSG,
@@ -162,6 +179,24 @@ class WeChatChannel:
                 logger.info("image sent successfully")
             else:
                 logger.error(f"[Server Error]: {res.text}")
+        except Exception as e:
+            logger.error(f"[Download Image Error]: {e}")
+
+    def send_img(self, content, wxid):
+        try:
+            # download image
+            path = os.path.abspath("./assets")
+            img_name = int(time.time() * 1000)
+            response = requests.get(content, stream=True)
+            response.raise_for_status()  # Raise exception if invalid response
+
+            with open(f"{path}\\{img_name}.png", "wb+") as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    if chunk:  # filter out keep-alive new chunks
+                        f.write(chunk)
+                f.close()
+            img_path = os.path.abspath(f"{path}\\{img_name}.png").replace("\\", "\\\\")
+            self.send_image_path(img_path,wxid)
         except Exception as e:
             logger.error(f"[Download Image Error]: {e}")
 
