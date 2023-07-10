@@ -5,10 +5,19 @@ import base64
 import json
 import requests
 from config import conf
+import asyncio
 
 from utils.log import logger
 from utils.erciyuan import getdesc
+
+from concurrent.futures import ThreadPoolExecutor
+
+from draw.pix_draw_service import async_pix_task
+
 translator = Translator()
+
+# 创建一个线程池
+executor = ThreadPoolExecutor(max_workers=5)
 
 
 with open('aidraw.json', mode="r", encoding="utf-8") as f:
@@ -20,50 +29,101 @@ def translate(tags):
     print(translation.origin, ' -> ', translation.text)
     return translation.text
 
-def send_cn_stable_img(wx_plugin,tags,wxid):
+def save_image_from_url(url, filename):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            with open(filename, 'wb') as file:
+                file.write(response.content)
+            print("图片保存成功！"+url)
+        else:
+            print("无法获取图片。HTTP状态码:", response.status_code)
+    except requests.exceptions.RequestException as e:
+        print("发生异常:", e)
 
-        # download image
-        path = os.path.abspath("./assets")
-        img_name = int(time.time() * 1000)
-        # response = requests.get(content, stream=True)
-        # response.raise_for_status()  # Raise exception if invalid response
+def get_image_content(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            # with open(filename, 'wb') as file:
+            #     file.write(response.content)
+            # print("图片保存成功！"+url)
+            return response.content
+        else:
+            print("无法获取图片。HTTP状态码:", response.status_code)
+    except requests.exceptions.RequestException as e:
+        print("发生异常:", e)
+    return None
 
-        aidraw['text2image']['prompt'] = tags
-        aidraw['text2image']['seed'] = -1
-        aidraw['text2image']['sampler_index'] = 'Euler a'
-        aidraw['text2image']['steps'] = 20
-        aidraw['text2image']['cfg_scale'] = 7
 
 
-        try:
-            headers = {'Content-Type': 'application/json', 'Authorization':''}
-            response = requests.post(conf().get("stable_diffustion") + '/sdapi/v1/txt2img', data=json.dumps(aidraw['text2image']),headers=headers)
-            response.raise_for_status()  # 检查响应状态码
+async def async_local_stable_image(wx_plugin,wxid):
+    print('async_local_stable_image start')
+    # download image
+    path = os.path.abspath("./assets")
+    img_name = int(time.time() * 1000)
 
-            # 从响应中获取数据
-            json_data = response.json()
-            base64_image = json_data['images'][0].replace('data:image/png;', '').replace('base64,', '')
-            # 将base64编码的图像转换为字节数据
-            image_bytes = base64.b64decode(base64_image)
+    try:
+        headers = {'Content-Type': 'application/json', 'Authorization':''}
+        response = requests.post(conf().get("stable_diffustion") + '/sdapi/v1/txt2img', data=json.dumps(aidraw['text2image']),headers=headers)
+        response.raise_for_status()  # 检查响应状态码
+            # return response.json()  # 返回请求到的JSON响应数据
 
-            with open(f"{path}\\{img_name}.png", "wb+") as f:
-                f.write(image_bytes) # 返回请求到的JSON响应数据
-                f.close()
+        # 从响应中获取数据
+        json_data = response.json()
+        base64_image = json_data['images'][0].replace('data:image/png;', '').replace('base64,', '')
+        # 将base64编码的图像转换为字节数据
+        image_bytes = base64.b64decode(base64_image)
 
-        except requests.exceptions.HTTPError as e:
-            print("HTTP请求错误:", e)
-            print("响应状态码:", response.status_code)
-            print("响应内容:", response.text)
-            return
-        except requests.exceptions.RequestException as e:
-            print("请求发生异常:", e)
-            return
-        except Exception as e:
-            print("发生错误:", e)
-            return
-
+        with open(f"{path}\\{img_name}.png", "wb+") as f:
+            f.write(image_bytes) # 返回请求到的JSON响应数据
+            f.close()
+        
         img_path = os.path.abspath(f"{path}\\{img_name}.png").replace("\\", "\\\\")
         wx_plugin.send_image_path(img_path,wxid)
+    except Exception as e:
+        print("发生错误:", e)
+    print('async_local_stable_image end')
+    return
+
+
+def async_local_task(wx_plugin,wxid):
+    print('async_local_task start')
+    loop = asyncio.new_event_loop()
+    try:
+        return loop.run_until_complete(async_local_stable_image(wx_plugin,wxid))
+    except Exception as e:
+        print("发生错误:", e)
+    finally:
+        print('finally')
+        loop.close()
+    print('async_local_task end')
+
+
+
+def send_cn_stable_img(wx_plugin,tags,wxid):
+    # response = requests.get(content, stream=True)
+    # response.raise_for_status()  # Raise exception if invalid response
+
+    aidraw['text2image']['prompt'] = tags
+    aidraw['text2image']['seed'] = -1
+    aidraw['text2image']['sampler_index'] = 'Euler a'
+    aidraw['text2image']['steps'] = 20
+    aidraw['text2image']['cfg_scale'] = 7
+
+    try:
+        print('asyncio run local start')
+        # 提交异步任务到线程池
+        executor.submit(async_local_task,wx_plugin,wxid)
+        print('asyncio run local end')
+    except Exception as e:
+        print("发生错误:", e)
+        print('asyncio run start')
+        # 提交异步任务到线程池
+        executor.submit(async_pix_task,wx_plugin,tags,wxid)
+        print('asyncio run end')
+        return
+
 
 def send_stable_img(wx_plugin,tags,wxid):
     try:

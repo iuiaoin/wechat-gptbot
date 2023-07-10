@@ -9,6 +9,7 @@ import os
 from utils.gen import gen_id
 from bot.chatgpt import ChatGPTBot
 from bot.claudeapi import ClaudeAPIBot
+from bot.claudeslack import ClaudeSlackBot
 from common.singleton import singleton
 from config import conf
 from utils.check import check_prefix, is_wx_account
@@ -109,13 +110,13 @@ class WeChatChannel:
                 send_stable_img(self,query, room_id)
             elif match_erciyuan_prefix:
                 context["type"] = const.CREATE_IMAGE
-                send_erciyuan_room_stable_img(self, room_id,sender_id,sender_name)
-            else:     
-                if conf().get("only_boss") ==1 and conf().get("boss_id") != sender_id:
-                    logger.info("message not sent by boss account , ignore")
-                    return                           
-                if self.chat_mode=='claude_api':
-                    reply = ClaudeAPIBot().reply(cooked_query, context)                
+                send_erciyuan_room_stable_img(self, room_id,sender_id,sender_name)                       
+            else:
+                if self.chat_mode=='claude_slack':
+                    ClaudeSlackBot().reply(self,sender_id=sender_id,room_id=room_id,sender_name=sender_name,query=cooked_query, context= context)   
+                    return             
+                elif self.chat_mode=='claude_api':
+                    reply = ClaudeAPIBot().reply(cooked_query, context)    
                 else:
                     reply = ChatGPTBot().reply(cooked_query, context)
                 if reply.type == ReplyType.IMAGE:
@@ -152,7 +153,10 @@ class WeChatChannel:
             context["type"] = const.CREATE_IMAGE
             send_erciyuan_stable_img(self, sender_id,sender_id,'你')            
         else:
-            if self.chat_mode=='claude_api':
+            if self.chat_mode=='claude_slack':
+                ClaudeSlackBot().reply(self,sender_id=sender_id, query=query, context=context)     
+                return           
+            elif self.chat_mode=='claude_api':
                 reply = ClaudeAPIBot().reply(query, context)            
             else:
                 reply = ChatGPTBot().reply(query, context)
