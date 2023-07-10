@@ -61,6 +61,9 @@ Then fill in the configuration in `config.json`, the following is the descriptio
 
 ```bash
 {
+  "only_boss":0,
+  "boss_id":"",
+  "chat_mode":"claude_slack",                          # 聊天AI模型，claude_slack,claude_api,chatgpt_api
   "openai_api_key": "YOUR API SECRET KEY",             # Fill in your OpenAI API Key
   "model": "gpt-3.5-turbo",                            # ID of the model to use, support gpt-3.5-turbo, gpt-4, gpt-4-32k etc.
   "role_desc": "You are a helpful assistant.",         # Role description as system prompt
@@ -76,6 +79,15 @@ Then fill in the configuration in `config.json`, the following is the descriptio
   "single_chat_prefix": ["bot", "@bot"],               # Start conversation with "bot" or "@bot" in single chat to trigger the bot, leave it empty if you wanna make the bot active all the time
   "query_key_command": "#query key"                    # Querying the usage of the api key
   "recent_days": 5                                     # The usage in <recent_days> days
+  "stable_diffustion":"",                              # 画图服务器地址
+  "erciyuan_image_prefix":["二次元的我"],               # 特殊指令，随机画图
+  "claude_api_key":"",                                 # claude api token
+  "claude_model":"claude-v1",                          # claude api 模型
+  "claude_max_tokens":1000,
+  "CLAUDE_BOT_ID":"",                                  # slack工作区claude的id
+  "SLACK_USER_TOKEN":"",                               # slack工作区的user token
+  "CHANNEL_ID":"",                                     # slack工作区频道的id
+  "bbs_pix":""
 }
 ```
 
