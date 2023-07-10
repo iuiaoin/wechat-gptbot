@@ -1,4 +1,6 @@
 {
+  "only_boss":0,
+  "boss_id":"",
   "chat_mode":"claude_slack",
   "openai_api_key": "",
   "model": "gpt-3.5-turbo",
