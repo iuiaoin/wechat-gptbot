@@ -82,7 +82,7 @@ Then fill in the configuration in `config.json`, the following is the descriptio
   "stable_diffustion":"",                              # 画图服务器地址
   "erciyuan_image_prefix":["二次元的我"],               # 特殊指令，随机画图
   "claude_api_key":"",                                 # claude api token
-  "claude_model":"claude-v1",                          # claude api 模型
+  "claude_model":"claude-v1",                          # claude api 模型,support claude-v1,claude-v1-100k,claude-instant-v1,claude-instant-v1-100k
   "claude_max_tokens":1000,
   "CLAUDE_BOT_ID":"",                                  # slack工作区claude的id
   "SLACK_USER_TOKEN":"",                               # slack工作区的user token
