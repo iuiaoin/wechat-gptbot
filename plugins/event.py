@@ -22,6 +22,9 @@ class EventAction(Enum):
 
 
 class Event(BaseModel):
+    class Config:
+        arbitrary_types_allowed = True
+
     type: EventType = None
     channel: Channel = None
     message: Message = None
@@ -30,6 +33,7 @@ class Event(BaseModel):
     action: EventAction = EventAction.PROCEED
 
     def __init__(self, type: EventType, data: dict):
+        super.__init__()
         self.type = type
         self.channel = data.get("channel")
         self.message = data.get("message")
