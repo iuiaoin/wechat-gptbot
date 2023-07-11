@@ -18,10 +18,11 @@ from utils.serialize import serialize_img, serialize_text
 from plugins.manager import PluginManager
 from common.context import ContextType, Context
 from plugins.event import EventType, Event
+from channel.channel import Channel
 
 
 @singleton
-class WeChatChannel:
+class WeChatChannel(Channel):
     def __init__(self):
         requests.packages.urllib3.disable_warnings()
         warnings.filterwarnings("ignore")
