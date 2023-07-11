@@ -15,7 +15,7 @@ class Channel(ABC):
         pass
 
     @abstractmethod
-    def generate_reply(self, context):
+    def handle_reply(self, msg, context):
         pass
 
     @abstractmethod

@@ -109,7 +109,7 @@ class WeChatChannel(Channel):
             match_prefix = check_prefix(query, create_image_prefix)
             if match_prefix:
                 context.type = ContextType.CREATE_IMAGE
-            self.handle_reply(context, msg)
+            self.handle_reply(msg, context)
 
     def handle_single(self, msg: Message):
         # ignore message sent by public/subscription account
@@ -132,9 +132,9 @@ class WeChatChannel(Channel):
         match_image_prefix = check_prefix(query, create_image_prefix)
         if match_image_prefix:
             context.type = ContextType.CREATE_IMAGE
-        self.handle_reply(context, msg)
+        self.handle_reply(msg, context)
 
-    def handle_reply(self, context: Context, msg: Message):
+    def handle_reply(self, msg: Message, context: Context):
         e1 = PluginManager().emit(
             Event(
                 EventType.WILL_GENERATE_REPLY,

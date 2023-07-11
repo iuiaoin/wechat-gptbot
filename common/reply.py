@@ -16,6 +16,7 @@ class Reply(BaseModel):
     content: str = None
 
     def __init__(self, type: ReplyType, content: str):
+        super().__init__()
         self.type = type
         self.content = content
 
