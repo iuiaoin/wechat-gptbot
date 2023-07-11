@@ -16,6 +16,7 @@ from plugins.event import Event, EventType
 @singleton
 class PluginManager(Emitter):
     def __init__(self):
+        super().__init__()
         self._plugins = {}
         self._configs = {}
 

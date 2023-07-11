@@ -6,6 +6,7 @@ class Plugin(ABC):
     name = None
 
     def __init__(self, config: dict):
+        super().__init__()
         if self.name is None:
             raise NotImplementedError("Plugin name is not defined")
         self.config = config
