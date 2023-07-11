@@ -10,7 +10,7 @@ class Message(BaseModel):
     receiver_id: str = None
     receiver_name: str = None
     content: str = None
-    type: int = None
+    type: int = None  # MessageType value
     is_group: bool = False
     is_at: bool = False
     create_time: str = None

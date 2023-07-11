@@ -1,4 +1,5 @@
 from enum import Enum
+from pydantic import BaseModel
 
 
 class ReplyType(Enum):
@@ -10,8 +11,11 @@ class ReplyType(Enum):
         return self.name
 
 
-class Reply:
-    def __init__(self, type: ReplyType = None, content=None):
+class Reply(BaseModel):
+    type: ReplyType = None
+    content: str = None
+
+    def __init__(self, type: ReplyType, content: str):
         self.type = type
         self.content = content
 
