@@ -3,9 +3,9 @@ from config import conf
 from common.singleton import singleton
 from utils.log import logger
 from common.session import Session
-from utils import const
 from common.reply import Reply, ReplyType
 from utils.query_key import QueryKey
+from common.context import ContextType, Context
 
 
 @singleton
@@ -19,14 +19,19 @@ class ChatGPTBot:
         if proxy:
             openai.proxy = proxy
 
-    def reply(self, query, context=None):
+    def reply(self, context: Context):
+        query = context.query
         logger.info(f"[ChatGPT] Query={query}")
-        if context.get("type", None) == const.CREATE_IMAGE:
+        if context.type == ContextType.CREATE_IMAGE:
             return self.reply_img(query)
         else:
-            session_id = context.get("session_id")
-            clear_session_command = conf().get("clear_session_command") or "#clear session"
-            clear_all_sessions_command = conf().get("clear_all_sessions_command") or "#clear all sessions"
+            session_id = context.session_id
+            clear_session_command = (
+                conf().get("clear_session_command") or "#clear session"
+            )
+            clear_all_sessions_command = (
+                conf().get("clear_all_sessions_command") or "#clear all sessions"
+            )
             query_key_command = conf().get("query_key_command") or "#query key"
             if query == clear_session_command:
                 Session.clear_session(session_id)
@@ -40,7 +45,9 @@ class ChatGPTBot:
             response = self.reply_text(session)
             logger.info(f"[ChatGPT] Response={response['content']}")
             if response["completion_tokens"] > 0:
-                Session.save_session(response["content"], session_id, response["total_tokens"])
+                Session.save_session(
+                    response["content"], session_id, response["total_tokens"]
+                )
             return Reply(ReplyType.TEXT, response["content"])
 
     def reply_img(self, query):
@@ -51,7 +58,7 @@ class ChatGPTBot:
             return Reply(ReplyType.IMAGE, image_url)
         except Exception as e:
             logger.error(f"[ChatGPT] Create image failed: {e}")
-            return Reply(ReplyType.ERROR, "Image created failed")
+            return Reply(ReplyType.TEXT, "Image created failed")
 
     def reply_text(self, session):
         model = conf().get("model")
@@ -79,7 +86,9 @@ class ChatGPTBot:
                 result["content"] = "Ask too frequently, please try again in 20s"
             elif isinstance(e, openai.error.APIConnectionError):
                 logger.warn(f"[ChatGPT] APIConnectionError: {e}")
-                result["content"] = "I cannot connect the server, please check the network and try again"
+                result[
+                    "content"
+                ] = "I cannot connect the server, please check the network and try again"
             elif isinstance(e, openai.error.Timeout):
                 logger.warn(f"[ChatGPT] Timeout: {e}")
                 result["content"] = "I didn't receive your message, please try again"

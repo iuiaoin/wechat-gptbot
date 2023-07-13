@@ -13,5 +13,6 @@
   "chat_group_session_independent": false,
   "single_chat_prefix": ["bot", "@bot"],
   "query_key_command": "#query key",
-  "recent_days": 5
+  "recent_days": 5,
+  "plugins": [{ "name": "tiktok", "command": "#tiktok" }]
 }
