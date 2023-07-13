@@ -42,8 +42,8 @@ class PluginManager(Emitter):
         existed_plugins = self.get_existed()
         new_plugins = set()
         for plugin in plugins:
-            if plugin.name not in existed_plugins:
-                new_plugins.add(plugin.name)
+            if plugin["name"] not in existed_plugins:
+                new_plugins.add(plugin["name"])
         return new_plugins
 
     def install_plugins(self, plugins: Set[str]) -> Set[str]:
