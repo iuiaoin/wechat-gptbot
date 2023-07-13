@@ -5,3 +5,4 @@ config.json
 assets/*.png
 assets/*.mp4
 .ruff_cache
+plugins/**/

@@ -75,6 +75,9 @@ class PluginManager(Emitter):
                             porcelain.clone(repo, dirname, checkout=True)
                             dependency_path = os.path.join(dirname, "requirements.txt")
                             if os.path.exists(dependency_path):
+                                logger.info(
+                                    f"Installing dependencies for {plugin_name}"
+                                )
                                 install_file(dependency_path)
                             logger.info(f"Install plugin {plugin_name} successfully")
                         except Exception as e:
