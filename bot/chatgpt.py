@@ -22,7 +22,7 @@ class ChatGPTBot:
     def reply(self, context: Context):
         query = context.query
         logger.info(f"[ChatGPT] Query={query}")
-        if context.get("type", None) == ContextType.CREATE_IMAGE:
+        if context.type == ContextType.CREATE_IMAGE:
             return self.reply_img(query)
         else:
             session_id = context.session_id
