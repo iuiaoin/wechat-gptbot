@@ -86,7 +86,7 @@ class PluginManager(Emitter):
             return failed_plugins
 
     def get_existed(self) -> Set[str]:
-        plugins_dir = "./plugins"
+        plugins_dir = os.path.abspath("./plugins")
         existed_plugins = set()
         for plugin_name in os.listdir(plugins_dir):
             plugin_path = os.path.join(plugins_dir, plugin_name)

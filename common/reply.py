@@ -3,9 +3,9 @@ from pydantic import BaseModel
 
 
 class ReplyType(Enum):
-    TEXT = "TEXT"
-    IMAGE = "IMAGE"
-    ERROR = "ERROR"
+    TEXT = 1
+    IMAGE = 2
+    Video = 3
 
     def __str__(self):
         return self.name

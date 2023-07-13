@@ -58,7 +58,7 @@ class ChatGPTBot:
             return Reply(ReplyType.IMAGE, image_url)
         except Exception as e:
             logger.error(f"[ChatGPT] Create image failed: {e}")
-            return Reply(ReplyType.ERROR, "Image created failed")
+            return Reply(ReplyType.TEXT, "Image created failed")
 
     def reply_text(self, session):
         model = conf().get("model")

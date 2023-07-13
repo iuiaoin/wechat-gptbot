@@ -12,9 +12,9 @@ from config import conf
 from utils.check import check_prefix, is_wx_account
 from common.reply import ReplyType, Reply
 from channel.message import Message
-from utils.api import get_personal_info, send_image
+from utils.api import get_personal_info, send_image, send_file
 from utils.const import MessageType
-from utils.serialize import serialize_img, serialize_text
+from utils.serialize import serialize_img, serialize_text, serialize_video
 from plugins.manager import PluginManager
 from common.context import ContextType, Context
 from plugins.event import EventType, Event
@@ -166,6 +166,10 @@ class WeChatChannel(Channel):
             img_path = serialize_img(reply.content)
             wx_id = msg.room_id if msg.is_group else msg.sender_id
             send_image(img_path, wx_id)
+        elif reply.type == ReplyType.Video:
+            file_path = serialize_video(reply.content)
+            wx_id = msg.room_id if msg.is_group else msg.sender_id
+            send_file(file_path, wx_id)
         else:
             reply_msg = serialize_text(reply.content, msg)
             self.ws.send(reply_msg)

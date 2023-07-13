@@ -59,6 +59,20 @@ def get_sender_name(room_id, sender_id):
     return json.loads(response["content"])["nick"]
 
 
+def send_txt(msg, wx_id):
+    path = "api/sendtxtmsg"
+    data = {
+        "type": MessageType.TXT_MSG.value,
+        "content": msg,
+        "wxid": wx_id,
+    }
+    response = fetch(path, data)
+    if response["status"] == const.SUCCESS:
+        logger.info("text sent successfully")
+    else:
+        logger.error(f"[Server Error]: {response.text}")
+
+
 def send_image(img_path, wx_id):
     path = "api/sendpic"
     data = {
@@ -69,5 +83,19 @@ def send_image(img_path, wx_id):
     response = fetch(path, data)
     if response["status"] == const.SUCCESS:
         logger.info("image sent successfully")
+    else:
+        logger.error(f"[Server Error]: {response.text}")
+
+
+def send_file(file_path, wx_id):
+    path = "api/sendattatch"
+    data = {
+        "type": MessageType.ATTACH_FILE.value,
+        "content": file_path,
+        "wxid": wx_id,
+    }
+    response = fetch(path, data)
+    if response["status"] == const.SUCCESS:
+        logger.info("file sent successfully")
     else:
         logger.error(f"[Server Error]: {response.text}")
