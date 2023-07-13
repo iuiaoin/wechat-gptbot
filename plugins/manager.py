@@ -22,7 +22,7 @@ class PluginManager(Emitter):
 
     def register(self, cls: Plugin):
         name = cls.name
-        config = self._configs[name]
+        config = self._configs.get(name)
         self._plugins[name] = cls(config)
         return cls
 
@@ -107,13 +107,14 @@ class PluginManager(Emitter):
 
     def activate_plugins(self, plugins: list) -> None:
         for plugin in plugins:
-            instance = self._plugins[plugin.name]
-            self.on(EventType.DID_RECEIVE_MESSAGE, instance.did_receive_message)
-            self.on(EventType.WILL_GENERATE_REPLY, instance.will_generate_reply)
-            self.on(EventType.WILL_SEND_REPLY, instance.will_send_reply)
+            instance = self._plugins.get(plugin.name)
+            if instance is not None:
+                self.on(EventType.DID_RECEIVE_MESSAGE, instance.did_receive_message)
+                self.on(EventType.WILL_GENERATE_REPLY, instance.will_generate_reply)
+                self.on(EventType.WILL_SEND_REPLY, instance.will_send_reply)
 
     def emit(self, event: Event) -> Event:
-        listeners = self.__events__[event.type]
+        listeners = self.__events__.get(event.type)
         if listeners is not None and len(listeners) > 0:
             for fn in listeners:
                 if event.is_proceed:
