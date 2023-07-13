@@ -5,7 +5,7 @@ from pydantic import BaseModel
 class ReplyType(Enum):
     TEXT = 1
     IMAGE = 2
-    Video = 3
+    VIDEO = 3
 
     def __str__(self):
         return self.name

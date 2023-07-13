@@ -166,7 +166,7 @@ class WeChatChannel(Channel):
             img_path = serialize_img(reply.content)
             wx_id = msg.room_id if msg.is_group else msg.sender_id
             send_image(img_path, wx_id)
-        elif reply.type == ReplyType.Video:
+        elif reply.type == ReplyType.VIDEO:
             file_path = serialize_video(reply.content)
             wx_id = msg.room_id if msg.is_group else msg.sender_id
             send_file(file_path, wx_id)

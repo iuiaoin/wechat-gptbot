@@ -23,7 +23,7 @@ class TikTok(Plugin):
         return "Use the command #tiktok(or whatever you like set with command field in the config) to get a wonderful video"
 
     def reply(self) -> Reply:
-        reply = Reply(ReplyType.Text, "Failed to get tiktok videos")
+        reply = Reply(ReplyType.TEXT, "Failed to get tiktok videos")
         try:
             response = requests.get(
                 "https://tucdn.wpon.cn/api-girl/", timeout=5, verify=False
@@ -35,7 +35,7 @@ class TikTok(Plugin):
                     re.S,
                 )
                 if len(videos_url) > 0:
-                    reply = Reply(ReplyType.Video, "http:" + str(videos_url[0]))
+                    reply = Reply(ReplyType.VIDEO, "http:" + str(videos_url[0]))
                 else:
                     logger.error("Error: Unrecognized URL connection")
             else:
