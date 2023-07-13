@@ -31,7 +31,7 @@ class PluginManager(Emitter):
         failed_plugins = self.install_plugins(new_plugins)
         all_plugins = conf().get("plugins") or []
         plugins = [
-            plugin for plugin in all_plugins if plugin.name not in failed_plugins
+            plugin for plugin in all_plugins if plugin["name"] not in failed_plugins
         ]
         self.import_plugins(plugins)
         self.activate_plugins(plugins)
@@ -100,14 +100,14 @@ class PluginManager(Emitter):
     def import_plugins(self, plugins: list) -> None:
         for plugin in plugins:
             try:
-                self._configs[plugin.name] = plugin
-                importlib.import_module(f"plugins.{plugin.name}")
+                self._configs[plugin["name"]] = plugin
+                importlib.import_module(f"plugins.{plugin['name']}")
             except Exception as e:
-                logger.exception(f"Failed to load plugin {plugin.name}: {e}")
+                logger.exception(f"Failed to load plugin {plugin['name']}: {e}")
 
     def activate_plugins(self, plugins: list) -> None:
         for plugin in plugins:
-            instance = self._plugins.get(plugin.name)
+            instance = self._plugins.get(plugin["name"])
             if instance is not None:
                 self.on(EventType.DID_RECEIVE_MESSAGE, instance.did_receive_message)
                 self.on(EventType.WILL_GENERATE_REPLY, instance.will_generate_reply)
