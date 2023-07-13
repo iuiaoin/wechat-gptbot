@@ -28,6 +28,11 @@
 - [x] **Basic Conversation：** Smart reply for private chat and group chat, support multiple rounds of session context memory, support GPT-3, GPT-3.5, GPT-4 models
 - [x] **Image Generation：** Support image generation, Dell-E only model for now
 - [x] **Flexible Configuration：** Support prompt settings, proxy, command settings and etc.
+- [x] **Plugin System：** Support personalized plugin extensions, you can easily integrate the functions you want
+
+## 📝 Changelog
+
+> **2023.07.13：** Introduce `plugin system` to make gptbot have more possibilities and easy to expand [#46](https://github.com/iuiaoin/wechat-gptbot/pull/46). Here's the first interesting plugin: [tiktok](https://github.com/iuiaoin/plugin_tiktok), try it and have fun!
 
 ## 🚀 Getting Start
 
@@ -76,6 +81,7 @@ Then fill in the configuration in `config.json`, the following is the descriptio
   "single_chat_prefix": ["bot", "@bot"],               # Start conversation with "bot" or "@bot" in single chat to trigger the bot, leave it empty if you wanna make the bot active all the time
   "query_key_command": "#query key"                    # Querying the usage of the api key
   "recent_days": 5                                     # The usage in <recent_days> days
+  "plugins": [{ "name": <plugin name>, other configs }]# Add the your favorite plugins
 }
 ```
 
