@@ -30,7 +30,10 @@ class Message(BaseModel):
             self.room_id = msg["wxid"]
             self.sender_id = msg["id1"]
             self.at_list = self.extract(msg["id3"])
-            self.is_at = self.receiver_id in self.at_list
+            for item in self.at_list:
+                if self.receiver_id in item:
+                    self.is_at = True
+                    break
         else:
             self.is_group = False
             self.sender_id = msg["wxid"]
