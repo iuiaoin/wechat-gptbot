@@ -41,7 +41,7 @@ class ChatGPTBot:
                 return Reply(ReplyType.TEXT, "All sessions have been cleared")
             elif query == query_key_command:
                 return Reply(ReplyType.TEXT, QueryKey.get_key())
-            session = Session.build_session_query(query, session_id)
+            session = Session.build_session_query(context)
             response = self.reply_text(session)
             logger.info(f"[ChatGPT] Response={response['content']}")
             if response["completion_tokens"] > 0:

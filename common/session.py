@@ -1,12 +1,13 @@
 from common.expired_dict import ExpiredDict
 from config import conf
+from common.context import Context
 
 
 class Session(object):
     all_sessions = ExpiredDict(conf().get("session_expired_duration") or 3600)
 
     @staticmethod
-    def build_session_query(query, session_id):
+    def build_session_query(context: Context):
         """
         build query with conversation history
         e.g.  [
@@ -19,13 +20,12 @@ class Session(object):
         :param session_id: session id
         :return: query content with conversaction
         """
-        session = Session.all_sessions.get(session_id, [])
+        session = Session.all_sessions.get(context.session_id, [])
         if len(session) == 0:
-            system_prompt = conf().get("role_desc")
-            system_item = {"role": "system", "content": system_prompt}
+            system_item = {"role": "system", "content": context.system_prompt}
             session.append(system_item)
-            Session.all_sessions[session_id] = session
-        user_item = {"role": "user", "content": query}
+            Session.all_sessions[context.session_id] = session
+        user_item = {"role": "user", "content": context.query}
         session.append(user_item)
         return session
 
