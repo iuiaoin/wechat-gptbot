@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from enum import Enum
+from config import conf
 
 
 class ContextType(Enum):
@@ -14,3 +15,4 @@ class Context(BaseModel):
     session_id: str = None
     type: ContextType = ContextType.CREATE_TEXT
     query: str = None
+    system_prompt: str = conf().get("role_desc")
