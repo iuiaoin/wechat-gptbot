@@ -32,7 +32,7 @@
 
 ## 📝 Changelog
 
-> **2023.07.13：** Introduce `plugin system` to make gptbot have more possibilities and easy to expand [#46](https://github.com/iuiaoin/wechat-gptbot/pull/46). Here's the first interesting plugin: [tiktok](https://github.com/iuiaoin/plugin_tiktok), try it and have fun!
+> **2023.07.13：** Introduce `plugin system` to make gptbot have more possibilities and easy to expand [#46](https://github.com/iuiaoin/wechat-gptbot/pull/46). Here's the first interesting plugin: [tiktok](https://github.com/iuiaoin/plugin_tiktok), try it and have fun! Also refer to [docs](plugins/README.md) to learn the usage and how to contribute~
 
 ## 🚀 Getting Start
 
