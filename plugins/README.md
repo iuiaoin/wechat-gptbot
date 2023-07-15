@@ -69,9 +69,9 @@ def did_receive_message(self, event: Event):
 
 def will_generate_reply(self, event: Event):
     query = event.context.query
-    if query == self.config.get("command"):
-        event.reply = self.reply()  # modify the reply
-        event.bypass()              # bypass the plugin chain and default logic
+    if query == self.config.get("command"): # instance will get plugin configs when inits
+        event.reply = self.reply()          # modify the reply
+        event.bypass()                      # bypass the plugin chain and default logic
 
 def will_send_reply(self, event: Event):
     pass

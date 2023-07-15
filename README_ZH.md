@@ -32,7 +32,7 @@
 
 ## 📝 更新日志
 
-> **2023.07.13：** 引入`插件系统`，让 gptbot 拥有更多可能性，且易于扩展 [#46](https://github.com/iuiaoin/wechat-gptbot/pull/46). 这是第一个好玩的插件: [tiktok](https://github.com/iuiaoin/plugin_tiktok), 赶快来尝试一下吧!另请参阅此处的[文档](plugins/README.md)来了解用法和如何贡献~
+> **2023.07.13：** 引入`插件系统`，让 gptbot 拥有更多可能性，且易于扩展 [#46](https://github.com/iuiaoin/wechat-gptbot/pull/46). 这是第一个好玩的插件: [tiktok](https://github.com/iuiaoin/plugin_tiktok), 赶快来尝试一下吧! 另请参阅此处的[文档](plugins/README.md)来了解用法和如何贡献~
 
 ## 🚀 快速开始
 
