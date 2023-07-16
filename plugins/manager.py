@@ -128,5 +128,5 @@ class PluginManager(Emitter):
                     break
         return event
 
-    def built_in(self):
-        self.on(EventType.WILL_GENERATE_REPLY, Cmd().will_generate_reply)
+    def built_in(self, plugins: dict):
+        self.on(EventType.WILL_GENERATE_REPLY, Cmd(plugins).will_generate_reply)
