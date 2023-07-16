@@ -1,7 +1,8 @@
-from common.singleton import singleton
 from config import conf
+from common.singleton import singleton
 from common.session import Session
-from plugins import Event, Reply, ReplyType
+from common.reply import Reply, ReplyType
+from plugins.event import Event
 from utils.query_key import QueryKey
 
 
