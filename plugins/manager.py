@@ -11,6 +11,7 @@ from utils.package import install_file
 from plugins.plugin import Plugin
 from common.emitter import Emitter
 from plugins.event import Event, EventType
+from plugins.built_in import Cmd
 
 
 @singleton
@@ -19,6 +20,7 @@ class PluginManager(Emitter):
         super().__init__()
         self._plugins = {}
         self._configs = {}
+        self.built_in(self._plugins)
 
     def register(self, cls: Plugin):
         name = cls.name
@@ -125,3 +127,6 @@ class PluginManager(Emitter):
                 else:
                     break
         return event
+
+    def built_in(self):
+        self.on(EventType.WILL_GENERATE_REPLY, Cmd().will_generate_reply)

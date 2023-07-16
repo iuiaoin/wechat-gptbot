@@ -4,7 +4,6 @@ from common.singleton import singleton
 from utils.log import logger
 from common.session import Session
 from common.reply import Reply, ReplyType
-from utils.query_key import QueryKey
 from common.context import ContextType, Context
 
 
@@ -26,21 +25,6 @@ class ChatGPTBot:
             return self.reply_img(query)
         else:
             session_id = context.session_id
-            clear_session_command = (
-                conf().get("clear_session_command") or "#clear session"
-            )
-            clear_all_sessions_command = (
-                conf().get("clear_all_sessions_command") or "#clear all sessions"
-            )
-            query_key_command = conf().get("query_key_command") or "#query key"
-            if query == clear_session_command:
-                Session.clear_session(session_id)
-                return Reply(ReplyType.TEXT, "The session has been cleared")
-            elif query == clear_all_sessions_command:
-                Session.clear_all_session()
-                return Reply(ReplyType.TEXT, "All sessions have been cleared")
-            elif query == query_key_command:
-                return Reply(ReplyType.TEXT, QueryKey.get_key())
             session = Session.build_session_query(context)
             response = self.reply_text(session)
             logger.info(f"[ChatGPT] Response={response['content']}")
