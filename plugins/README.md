@@ -17,7 +17,7 @@ Support personalized plugin extensions, you can easily integrate the functions y
   ]
 ```
 
-3. And then you are done, nothing else to do! Just play with your plugins!
+And then you are done, nothing else to do! Just play with your plugins!
 
 ## Contributing
 
@@ -43,7 +43,7 @@ Use `@register` decorator to register plugin and extend basic `Plugin` class
 ```python
 @register
 class TikTok(Plugin):
-    name = "tiktok" # name is required and should be the same as in source.json
+    name = "tiktok" # name is required and must be the same as in source.json
 ```
 
 ### 3. Implement abstract methods
