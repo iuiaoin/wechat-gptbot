@@ -35,8 +35,9 @@ class ChatGPTBot:
             return Reply(ReplyType.TEXT, response["content"])
 
     def reply_img(self, query):
+        create_image_size = conf().get("create_image_size", "256x256")
         try:
-            response = openai.Image.create(prompt=query, n=1, size="256x256")
+            response = openai.Image.create(prompt=query, n=1, size=create_image_size)
             image_url = response["data"][0]["url"]
             logger.info(f"[ChatGPT] Image={image_url}")
             return Reply(ReplyType.IMAGE, image_url)
