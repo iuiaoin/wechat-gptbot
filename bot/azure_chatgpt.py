@@ -13,7 +13,7 @@ class AzureChatGPTBot(ChatGPTBot):
         openai.api_version = "2023-03-15-preview"
         self.args["deployment_id"] = conf().get("azure_deployment_id")
 
-    def reply_img(self, query):
+    def reply_img(self, query) -> Reply:
         url = f"{openai.api_base}dalle/text-to-image?api-version=2022-08-03-preview"
         headers = {"api-key": openai.api_key, "Content-Type": "application/json"}
         create_image_size = conf().get("create_image_size", "256x256")
