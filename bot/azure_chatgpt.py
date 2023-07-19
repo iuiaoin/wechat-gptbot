@@ -1,13 +1,11 @@
 import openai
 import requests
 from bot.chatgpt import ChatGPTBot
-from common.singleton import singleton
 from config import conf
 from utils.log import logger
 from common.reply import Reply, ReplyType
 
 
-@singleton
 class AzureChatGPTBot(ChatGPTBot):
     def __init__(self):
         super().__init__()

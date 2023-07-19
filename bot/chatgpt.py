@@ -1,13 +1,11 @@
 import openai
 from config import conf
-from common.singleton import singleton
 from utils.log import logger
 from common.session import Session
 from common.reply import Reply, ReplyType
 from common.context import ContextType, Context
 
 
-@singleton
 class ChatGPTBot:
     def __init__(self):
         openai.api_key = conf().get("openai_api_key")
