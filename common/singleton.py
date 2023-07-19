@@ -1,9 +1,11 @@
 def singleton(cls):
     instances = {}
 
-    def get_instance(*args, **kwargs):
-        if cls not in instances:
-            instances[cls] = cls(*args, **kwargs)
-        return instances[cls]
+    class Singleton(cls):
+        def __new__(cls, *args, **kwargs):
+            if cls not in instances:
+                instances[cls] = super(Singleton, cls).__new__(cls, *args, **kwargs)
+            return instances[cls]
 
-    return get_instance
+    Singleton.__name__ = cls.__name__
+    return Singleton

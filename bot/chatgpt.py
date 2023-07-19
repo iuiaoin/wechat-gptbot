@@ -17,6 +17,10 @@ class ChatGPTBot:
             openai.api_base = api_base
         if proxy:
             openai.proxy = proxy
+        self.args = {
+            "model": conf().get("model"),
+            "temperature": conf().get("temperature"),
+        }
 
     def reply(self, context: Context):
         query = context.query
@@ -46,16 +50,13 @@ class ChatGPTBot:
             return Reply(ReplyType.TEXT, "Image created failed")
 
     def reply_text(self, session):
-        model = conf().get("model")
-        temperature = conf().get("temperature")
         try:
             response = openai.ChatCompletion.create(
-                model=model,
                 messages=session,
-                temperature=temperature,
                 top_p=1.0,
                 frequency_penalty=0.0,
                 presence_penalty=0.0,
+                **self.args,
             )
             return {
                 "total_tokens": response["usage"]["total_tokens"],
