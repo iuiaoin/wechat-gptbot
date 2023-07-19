@@ -46,14 +46,12 @@ class ChatGPTBot:
 
     def reply_text(self, session):
         model = conf().get("model")
-        max_tokens = conf().get("max_tokens")
         temperature = conf().get("temperature")
         try:
             response = openai.ChatCompletion.create(
                 model=model,
                 messages=session,
                 temperature=temperature,
-                max_tokens=max_tokens,
                 top_p=1.0,
                 frequency_penalty=0.0,
                 presence_penalty=0.0,
