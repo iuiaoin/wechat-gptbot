@@ -7,6 +7,7 @@
   "temperature": 0.9,
   "proxy": "",
   "openai_api_base": "",
+  "create_image_size": "256x256",
   "create_image_prefix": ["draw", "paint", "imagine"],
   "clear_current_session_command": "#clear session",
   "clear_all_sessions_command": "#clear all sessions",

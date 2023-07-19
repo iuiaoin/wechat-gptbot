@@ -74,6 +74,7 @@ Then fill in the configuration in `config.json`, the following is the descriptio
   "temperature": 0.9,                                  # Between 0 and 2. Higher values make the output more random, while lower values more focused
   "proxy": "127.0.0.1:3000",                           # Proxy client ip and port
   "openai_api_base": "",                               # api url used by openai service
+  "create_image_size": "256x256",                      # Dall-E image size, support 256x256, 512x512, 1024x1024
   "create_image_prefix": ["draw", "paint", "imagine"], # Text prefix for image generation
   "clear_current_session_command": "#clear session",   # Clear current session
   "clear_all_sessions_command": "#clear all sessions", # Clear all sessions
