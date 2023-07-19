@@ -22,7 +22,7 @@ class ChatGPTBot:
             "temperature": conf().get("temperature"),
         }
 
-    def reply(self, context: Context):
+    def reply(self, context: Context) -> Reply:
         query = context.query
         logger.info(f"[ChatGPT] Query={query}")
         if context.type == ContextType.CREATE_IMAGE:
@@ -38,7 +38,7 @@ class ChatGPTBot:
                 )
             return Reply(ReplyType.TEXT, response["content"])
 
-    def reply_img(self, query):
+    def reply_img(self, query) -> Reply:
         create_image_size = conf().get("create_image_size", "256x256")
         try:
             response = openai.Image.create(prompt=query, n=1, size=create_image_size)
