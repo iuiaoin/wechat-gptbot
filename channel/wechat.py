@@ -6,7 +6,7 @@ import requests
 from utils.log import logger
 from utils import const
 import os
-from bot.chatgpt import ChatGPTBot
+from bot.bot import Bot
 from common.singleton import singleton
 from config import conf
 from utils.check import check_prefix, is_wx_account
@@ -144,7 +144,7 @@ class WeChatChannel(Channel):
         if e1.is_bypass:
             return self.send(e1.reply, e1.message)
 
-        reply = ChatGPTBot().reply(e1.context)
+        reply = Bot().reply(e1.context)
 
         e2 = PluginManager().emit(
             Event(

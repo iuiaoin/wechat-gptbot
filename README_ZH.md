@@ -68,6 +68,8 @@ pip install -r requirements.txt
 {
   "openai_api_key": "YOUR API SECRET KEY",             # 填入你的 OpenAI API Key
   "model": "gpt-3.5-turbo",                            # 要使用的模型 ID, 支持 gpt-3.5-turbo, gpt-4, gpt-4-32k 等
+  "use_azure_chatgpt": false,                          # 是否使用 Azure OpenAI API
+  "azure_deployment_id": "",                           # Azure 模型部署名称
   "role_desc": "You are a helpful assistant.",         # 角色描述, 作为系统 prompt
   "session_expired_duration": 3600,                    # 对话记忆的保留时长
   "max_tokens": 1000,                                  # 对话记忆字符的最大 token 数量
