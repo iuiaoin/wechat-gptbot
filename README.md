@@ -68,6 +68,8 @@ Then fill in the configuration in `config.json`, the following is the descriptio
 {
   "openai_api_key": "YOUR API SECRET KEY",             # Fill in your OpenAI API Key
   "model": "gpt-3.5-turbo",                            # ID of the model to use, support gpt-3.5-turbo, gpt-4, gpt-4-32k etc.
+  "use_azure_chatgpt": false,                          # Whether use Azure OpenAI API
+  "azure_deployment_id": "",                           # Azure model deployment name
   "role_desc": "You are a helpful assistant.",         # Role description as system prompt
   "session_expired_duration": 3600,                    # Session memory kept duration
   "max_tokens": 1000,                                  # Max tokens of characters for session memory
