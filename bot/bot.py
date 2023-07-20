@@ -6,13 +6,16 @@ from common.reply import Reply
 
 @singleton
 class Bot:
-    def reply(self, context: Context) -> Reply:
+    def __init__(self):
         use_azure_chatgpt = conf().get("use_azure_chatgpt", False)
         if use_azure_chatgpt:
             from bot.azure_chatgpt import AzureChatGPTBot
 
-            return AzureChatGPTBot().reply(context)
+            self.bot = AzureChatGPTBot()
         else:
             from bot.chatgpt import ChatGPTBot
 
-            return ChatGPTBot().reply(context)
+            self.bot = ChatGPTBot()
+
+    def reply(self, context: Context) -> Reply:
+        return self.bot.reply(context)
