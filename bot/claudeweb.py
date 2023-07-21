@@ -50,21 +50,36 @@ class ClaudeWebBot:
             clear_session_command = conf().get("clear_session_command") or "#clear session"
             clear_all_sessions_command = conf().get("clear_all_sessions_command") or "#clear all sessions"
             query_key_command = conf().get("query_key_command") or "#query key"
-    
-            # if query == clear_session_command:
-            #     Session.clear_session(session_id)
-            #     return Reply(ReplyType.TEXT, "The session has been cleared")
-            # elif query == clear_all_sessions_command:
-            #     Session.clear_all_session()
-            #     return Reply(ReplyType.TEXT, "All sessions have been cleared")
-            # elif query == query_key_command:
-            #     return Reply(ReplyType.TEXT, QueryKey.get_key())
+            # reset_role_command = conf().get("reset_role_command") or "#resetrole"
+
+
+            if query == clear_session_command:
+                Session.clear_session(session_id)
+                self.replay(wx,sender_id,room_id,sender_name,'The session has been cleared',session_id)
+                return
+            elif query == clear_all_sessions_command:
+                Session.clear_all_session()
+                self.replay(wx,sender_id,room_id,sender_name,'All sessions have been cleared',session_id)
+                return
+            elif query == query_key_command:
+                self.replay(wx,sender_id,room_id,sender_name,'not support ',session_id)
+                return
+
             session = Session.build_session_query(query, session_id)
             if len(session) == 2:
                 query = session[0]['content']+"。"+query
             asyncio.run(self.async_reply_text(wx,sender_id,room_id,sender_name,query,session_id))
         except Exception as e:
             logger.exception(f"[ClaudeWeb] Exception: {e}")   
+
+    def replay(self,wx,sender_id,room_id,sender_name, total_msg,session_id):
+        logger.info(f"[ClaudeWeb] Response={total_msg}")
+        if room_id and sender_name:
+            reply_msg = wx.build_msg(total_msg, wxid=sender_id,room_id=room_id,nickname=sender_name)
+            wx.ws.send(reply_msg)
+        else:
+            reply_msg = wx.build_msg(total_msg, wxid=sender_id)
+            wx.ws.send(reply_msg)
 
     async def async_reply_text(self,wx,sender_id,room_id,sender_name, query,session_id):
         logger.info(f'async_reply_text')
@@ -83,14 +98,6 @@ class ClaudeWebBot:
         for message in response:
             total_msg += message
             # print(message, end='', flush=True)
+        self.replay(wx,sender_id,room_id,sender_name,total_msg,session_id)
+        
 
-        logger.info(f"[ClaudeWeb] Response={total_msg}")
-        # if response["completion_tokens"] > 0:
-        #     Session.save_session(response["content"], session_id, response["total_tokens"])
-        if room_id and sender_name:
-            reply_msg = wx.build_msg(total_msg, wxid=sender_id,room_id=room_id,nickname=sender_name)
-            wx.ws.send(reply_msg)
-        else:
-            reply_msg = wx.build_msg(total_msg, wxid=sender_id)
-            wx.ws.send(reply_msg)
-        # return Reply(ReplyType.TEXT, response["content"])            

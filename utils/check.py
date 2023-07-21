@@ -1,4 +1,6 @@
 def check_prefix(content, prefix_list):
+    if prefix_list == None:
+        return False
     for prefix in prefix_list:
         if content.startswith(prefix):
             return prefix

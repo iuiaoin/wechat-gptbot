@@ -82,10 +82,13 @@ class WeChatChannel:
             logger.info("message sent by self, ignore")
             return
         logger.info(f"message received: {msg}")
-        if "@chatroom" in msg["wxid"]:
-            self.handle_group(msg)
-        else:
-            self.handle_single(msg)
+        try:
+            if "@chatroom" in msg["wxid"]:
+                self.handle_group(msg)
+            else:
+                self.handle_single(msg)
+        except Exception as e:
+            logger.exception(f"[ClaudeWeb] Exception: {e}")   
 
     def handle_group(self, msg):
         room_id = msg["wxid"]
@@ -100,7 +103,8 @@ class WeChatChannel:
 
         if context["session_id"] not in self.chatRecordSession:
             self.chatRecordSession[context["session_id"]] =[]
-        self.chatRecordSession[context["session_id"]].append(query)
+        # if self.personal_info["wx_id"] not in atlist:
+        #     self.chatRecordSession[context["session_id"]].append(query)
         if len(self.chatRecordSession[context["session_id"]]) >10:
             self.chatRecordSession[context["session_id"]].pop(0)
 
