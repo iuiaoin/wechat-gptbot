@@ -33,7 +33,7 @@ class WeChatChannel:
             on_close=self.on_close,
         )
         self.chat_mode = conf().get("chat_mode")
-
+        self.chatRecordSession={}
 
     def startup(self):
         logger.info("App startup successfully!")
@@ -96,12 +96,21 @@ class WeChatChannel:
         context["session_id"] = sender_id if session_independent else room_id
         sender_name = self.get_sender_name(room_id, sender_id)
         atlist = msg["id3"]
+
+        if context["session_id"] not in self.chatRecordSession:
+            self.chatRecordSession[context["session_id"]] =[]
+        self.chatRecordSession[context["session_id"]].append(query)
+        if len(self.chatRecordSession[context["session_id"]]) >10:
+            self.chatRecordSession[context["session_id"]].pop(0)
+
         if self.personal_info["wx_id"] in atlist:
             cooked_query = query.replace(f"@{personal_name}", "", 1).strip()
             create_image_prefix = conf().get("create_image_prefix")
             erciyuan_image_prefix = conf().get("erciyuan_image_prefix")
+            zongjie_prefix = conf().get("zongjie_prefix")
             match_image_prefix = check_prefix(cooked_query, create_image_prefix)
             match_erciyuan_prefix = check_prefix(cooked_query, erciyuan_image_prefix)
+            zongjie_prefix = check_prefix(cooked_query, zongjie_prefix)
             if match_image_prefix:
                 if conf().get("only_boss") ==1 and conf().get("boss_id") != sender_id:
                     logger.info("message not sent by boss account , ignore")
@@ -112,13 +121,17 @@ class WeChatChannel:
                 context["type"] = const.CREATE_IMAGE
                 send_erciyuan_room_stable_img(self, room_id,sender_id,sender_name)                       
             else:
+                content = cooked_query
+                if zongjie_prefix:
+                    content = '\n'.join(self.chatRecordSession[context["session_id"]])
+                    print('总结发言:'+content)
                 if self.chat_mode=='claude_slack':
-                    ClaudeSlackBot().reply(self,sender_id=sender_id,room_id=room_id,sender_name=sender_name,query=cooked_query, context= context)   
+                    ClaudeSlackBot().reply(self,sender_id=sender_id,room_id=room_id,sender_name=sender_name,query=content, context= context)   
                     return             
                 elif self.chat_mode=='claude_api':
-                    reply = ClaudeAPIBot().reply(cooked_query, context)    
+                    reply = ClaudeAPIBot().reply(content, context)    
                 else:
-                    reply = ChatGPTBot().reply(cooked_query, context)
+                    reply = ChatGPTBot().reply(content, context)
                 if reply.type == ReplyType.IMAGE:
                     self.send_img(reply.content, room_id)
                 else:
