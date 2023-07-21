@@ -25,5 +25,6 @@
   "CLAUDE_BOT_ID":"",
   "SLACK_USER_TOKEN":"",
   "CHANNEL_ID":"",
-  "bbs_pix":""
+  "bbs_pix":"",
+  "claude_web_sessionKey":""
 }

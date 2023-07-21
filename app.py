@@ -2,7 +2,7 @@ from channel.wechat import WeChatChannel
 from config import load_config
 from utils.log import logger
 from utils.print import color_print
-
+from bot.claudeweb import ClaudeWebBot
 
 if __name__ == "__main__":
     try:
@@ -11,6 +11,7 @@ if __name__ == "__main__":
 
         # print banner
         color_print("WeChat GPTBot")
+        ClaudeWebBot().initsession()
 
         # start wechat channel
         WeChatChannel().startup()

@@ -10,6 +10,7 @@ from utils.gen import gen_id
 from bot.chatgpt import ChatGPTBot
 from bot.claudeapi import ClaudeAPIBot
 from bot.claudeslack import ClaudeSlackBot
+from bot.claudeweb import ClaudeWebBot
 from common.singleton import singleton
 from config import conf
 from utils.check import check_prefix, is_wx_account
@@ -127,7 +128,10 @@ class WeChatChannel:
                     print('总结发言:'+content)
                 if self.chat_mode=='claude_slack':
                     ClaudeSlackBot().reply(self,sender_id=sender_id,room_id=room_id,sender_name=sender_name,query=content, context= context)   
-                    return             
+                    return        
+                if self.chat_mode=='claude_web':
+                    ClaudeWebBot().reply(self,sender_id=sender_id,room_id=room_id,sender_name=sender_name,query=content, context= context)   
+                    return                         
                 elif self.chat_mode=='claude_api':
                     reply = ClaudeAPIBot().reply(content, context)    
                 else:
@@ -168,7 +172,10 @@ class WeChatChannel:
         else:
             if self.chat_mode=='claude_slack':
                 ClaudeSlackBot().reply(self,sender_id=sender_id, query=query, context=context)     
-                return           
+                return     
+            if self.chat_mode=='claude_web':
+                ClaudeWebBot().reply(self,sender_id=sender_id, query=query, context=context)     
+                return                         
             elif self.chat_mode=='claude_api':
                 reply = ClaudeAPIBot().reply(query, context)            
             else:
