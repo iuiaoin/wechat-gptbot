@@ -63,7 +63,7 @@ Then fill in the configuration in `config.json`, the following is the descriptio
 {
   "only_boss":0,
   "boss_id":"",
-  "chat_mode":"claude_slack",                          # 聊天AI模型，claude_slack,claude_api,chatgpt_api
+  "chat_mode":"claude_slack",                          # 聊天AI模型，claude_slack,claude_api,chatgpt_api,claude_web
   "openai_api_key": "YOUR API SECRET KEY",             # Fill in your OpenAI API Key
   "model": "gpt-3.5-turbo",                            # ID of the model to use, support gpt-3.5-turbo, gpt-4, gpt-4-32k etc.
   "role_desc": "You are a helpful assistant.",         # Role description as system prompt
@@ -87,7 +87,8 @@ Then fill in the configuration in `config.json`, the following is the descriptio
   "CLAUDE_BOT_ID":"",                                  # slack工作区claude的id
   "SLACK_USER_TOKEN":"",                               # slack工作区的user token
   "CHANNEL_ID":"",                                     # slack工作区频道的id
-  "bbs_pix":""
+  "bbs_pix":"",
+  "claude_web_sessionKey":""                           # claude.ai网站更多工具-打开开发者工具- Application-Cookies-sessionKey，填入“sessionKey=sk-xxxxxxx”
 }
 ```
 
