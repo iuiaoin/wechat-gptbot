@@ -126,3 +126,9 @@ python app.py
 ## 📢 声明
 
 WeChatSetup 安装包来自于 [wechat-windows-versions](https://github.com/tom-snow/wechat-windows-versions/releases), 微信 dll 注入器来自于 [wechat-bot](https://github.com/cixingguangming55555/wechat-bot), 所以你可以放心使用它。还要感谢两个 repo 的所有者的贡献。
+
+## 💖 Sponsor
+
+> **在 [爱发电](https://afdian.net/a/declan) 上成为赞助者**
+
+你的名字将会被特别列在这里的慷慨支持者下~
