@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to wechat-gptbot 👋</h1>
 <div align="center">
-  <img width="200" src="./docs/images/logo.png">
+  <img width="200" src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/SHCzIa.png">
 </div>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
@@ -105,7 +105,7 @@ Then fill in the configuration in `config.json`, the following is the descriptio
 python app.py
 ```
 
-<img width="1440" src="./docs/images/shell.png">
+<img width="1440" src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/9JUJGz.png">
 
 Voilà! Enjoy your exploring journey~
 
@@ -130,6 +130,8 @@ The WeChatSetup is coming from [wechat-windows-versions](https://github.com/tom-
 
 ## 💖 Sponsor
 
-> **Become a Sponsor on [AFDIAN](https://afdian.net/a/declan)**
+> Become a Sponsor on **[AFDIAN](https://afdian.net/a/declan)**. Your name will be specifically listed under Generous Backers here~
 
-Your name will be specifically listed under Generous Backers here~
+<a href="https://afdian.net/a/declan">
+  <img width="300" src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/tc1DLG.jpeg" />
+</a>

@@ -1,6 +1,6 @@
 <h1 align="center">欢迎使用 wechat-gptbot 👋</h1>
 <div align="center">
-  <img width="200" src="./docs/images/logo.png">
+  <img width="200" src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/SHCzIa.png">
 </div>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
@@ -105,7 +105,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-<img width="1440" src="./docs/images/shell.png">
+<img width="1440" src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/9JUJGz.png">
 
 噹噹！ 享受你的探索之旅吧~
 
@@ -127,8 +127,10 @@ python app.py
 
 WeChatSetup 安装包来自于 [wechat-windows-versions](https://github.com/tom-snow/wechat-windows-versions/releases), 微信 dll 注入器来自于 [wechat-bot](https://github.com/cixingguangming55555/wechat-bot), 所以你可以放心使用它。还要感谢两个 repo 的所有者的贡献。
 
-## 💖 Sponsor
+## 💖 赞助
 
-> **在 [爱发电](https://afdian.net/a/declan) 上成为赞助者**
+> 在 **[爱发电](https://afdian.net/a/declan)** 上成为赞助者. 你的名字将会被特别列在这里的慷慨支持者下~
 
-你的名字将会被特别列在这里的慷慨支持者下~
+<a href="https://afdian.net/a/declan">
+  <img width="300" src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/VxW1uA.jpeg" />
+</a>
