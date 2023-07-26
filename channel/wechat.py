@@ -103,8 +103,8 @@ class WeChatChannel:
 
         if context["session_id"] not in self.chatRecordSession:
             self.chatRecordSession[context["session_id"]] =[]
-        # if self.personal_info["wx_id"] not in atlist:
-        #     self.chatRecordSession[context["session_id"]].append(query)
+        if self.personal_info["wx_id"] not in atlist:
+            self.chatRecordSession[context["session_id"]].append(query)
         if len(self.chatRecordSession[context["session_id"]]) >10:
             self.chatRecordSession[context["session_id"]].pop(0)
 
