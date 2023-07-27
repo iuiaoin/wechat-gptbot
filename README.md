@@ -109,11 +109,26 @@ python app.py
 
 Voilà! Enjoy your exploring journey~
 
-## ✨ Contributor
+## ✨ Generous Backers
 
-<a href="https://github.com/iuiaoin/wechat-gptbot/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=iuiaoin/wechat-gptbot" />
-</a>
+> Thank you very much for your support, it will be my biggest motivation!
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="833" height="110">
+  <style>.link { cursor: pointer; } .avatar { border-radius: 50%; } .text { font: 12px; text-anchor: middle; }</style>
+  <a xlink:href="https://afdian.net/u/8ff851462be711ee9a4752540025c377" class="link" target="_blank">
+    <defs>
+      <clipPath id="crown">
+        <rect width="30" height="30" x="43" y="8" rx="12"/>
+      </clipPath>
+      <clipPath id="george">
+        <rect width="64" height="64" x="5" y="29" rx="32"/>
+      </clipPath>
+    </defs>
+    <image clip-path="url(#crown)" x="43" y="8" width="30" height="30" xlink:href="https://pic1.afdiancdn.com/static/img/rank-1.png" />
+    <image class="avatar" clip-path="url(#george)" x="5" y="29" width="64" height="64" xlink:href="https://pic1.afdiancdn.com/user/user_upload_osl/614eba86d42c75ac0a403bb02c181cee_w132_h132_s4.jpeg?imageView2/1/w/240/h/240" />
+    <text x="12" y="105">George</text>
+  </a>
+</svg>
 
 ## 🤝 Contributing
 
@@ -130,7 +145,7 @@ The WeChatSetup is coming from [wechat-windows-versions](https://github.com/tom-
 
 ## 💖 Sponsor
 
-> Become a Sponsor on **[AFDIAN](https://afdian.net/a/declan)**. Your name will be specifically listed under Generous Backers here~
+> Become a Sponsor on **[AFDIAN](https://afdian.net/a/declan)**. Your name will be specifically listed under Generous Backers~
 
 <a href="https://afdian.net/a/declan">
   <img width="300" src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/tc1DLG.jpeg" />

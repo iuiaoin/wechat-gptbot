@@ -109,11 +109,26 @@ python app.py
 
 噹噹！ 享受你的探索之旅吧~
 
-## ✨ 贡献者
+## ✨ 慷慨支持者
 
-<a href="https://github.com/iuiaoin/wechat-gptbot/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=iuiaoin/wechat-gptbot" />
-</a>
+> 非常感谢您的支持, 这将是我最大的动力！
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="833" height="110">
+  <style>.link { cursor: pointer; } .avatar { border-radius: 50%; } .text { font: 12px; text-anchor: middle; }</style>
+  <a xlink:href="https://afdian.net/u/8ff851462be711ee9a4752540025c377" class="link" target="_blank">
+    <defs>
+      <clipPath id="crown">
+        <rect width="30" height="30" x="43" y="8" rx="12"/>
+      </clipPath>
+      <clipPath id="george">
+        <rect width="64" height="64" x="5" y="29" rx="32"/>
+      </clipPath>
+    </defs>
+    <image clip-path="url(#crown)" x="43" y="8" width="30" height="30" xlink:href="https://pic1.afdiancdn.com/static/img/rank-1.png" />
+    <image class="avatar" clip-path="url(#george)" x="5" y="29" width="64" height="64" xlink:href="https://pic1.afdiancdn.com/user/user_upload_osl/614eba86d42c75ac0a403bb02c181cee_w132_h132_s4.jpeg?imageView2/1/w/240/h/240" />
+    <text x="12" y="105">George</text>
+  </a>
+</svg>
 
 ## 🤝 为项目添砖加瓦
 
@@ -129,7 +144,7 @@ WeChatSetup 安装包来自于 [wechat-windows-versions](https://github.com/tom-
 
 ## 💖 赞助
 
-> 在 **[爱发电](https://afdian.net/a/declan)** 上成为赞助者. 你的名字将会被特别列在这里的慷慨支持者下~
+> 在 **[爱发电](https://afdian.net/a/declan)** 上成为赞助者. 你的名字将会被特别列在慷慨支持者下~
 
 <a href="https://afdian.net/a/declan">
   <img width="300" src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/VxW1uA.jpeg" />
