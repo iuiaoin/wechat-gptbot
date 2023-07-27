@@ -113,7 +113,7 @@ Voilà! Enjoy your exploring journey~
 
 > Thank you very much for your support, it will be my biggest motivation!
 
-<img src="./docs/images/sponsors.svg" />
+<img src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/umfNTI.svg" />
 
 ## 🤝 Contributing
 
