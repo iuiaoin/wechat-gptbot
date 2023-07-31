@@ -20,6 +20,7 @@ class ChatGPTBot:
             "model": conf().get("model"),
             "temperature": conf().get("temperature"),
         }
+        self.reply_prefix = conf().get("reply_prefix")
 
     def reply(self, context: Context) -> Reply:
         query = context.query
@@ -35,6 +36,7 @@ class ChatGPTBot:
                 Session.save_session(
                     response["content"], session_id, response["total_tokens"]
                 )
+            response["content"] = self.reply_prefix + response["content"]
             return Reply(ReplyType.TEXT, response["content"])
 
     def reply_img(self, query) -> Reply:

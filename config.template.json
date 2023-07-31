@@ -15,6 +15,7 @@
   "clear_all_sessions_command": "#clear all sessions",
   "chat_group_session_independent": false,
   "single_chat_prefix": ["bot", "@bot"],
+  "reply_prefix":"",
   "query_key_command": "#query key",
   "recent_days": 5,
   "plugins": [{ "name": "tiktok", "command": "#tiktok" }]
