@@ -15,6 +15,10 @@ class Channel(ABC):
         pass
 
     @abstractmethod
+    def decorate_reply(self, reply, msg):
+        pass
+
+    @abstractmethod
     def handle_reply(self, msg, context):
         pass
 

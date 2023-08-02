@@ -2,5 +2,9 @@
   "tiktok": {
     "repo": "https://github.com/iuiaoin/plugin_tiktok.git",
     "desc": "A plugin show you short videos with pretty girls"
+  },
+  "weather": {
+    "repo": "https://github.com/iuiaoin/plugin_weather.git",
+    "desc": "A plugin that offers you daily weather report for free"
   }
 }
