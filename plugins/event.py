@@ -8,8 +8,9 @@ from channel.channel import Channel
 
 class EventType(Enum):
     DID_RECEIVE_MESSAGE = 1  # receive message
-    WILL_GENERATE_REPLY = 2  # decorate reply
-    WILL_SEND_REPLY = 3  # send message
+    WILL_GENERATE_REPLY = 2  # generate reply
+    WILL_DECORATE_REPLY = 3  # decorate reply
+    WILL_SEND_REPLY = 4  # send reply
 
     def __str__(self):
         return self.name

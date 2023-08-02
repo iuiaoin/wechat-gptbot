@@ -20,6 +20,10 @@ class Plugin(ABC):
         pass
 
     @abstractmethod
+    def will_decorate_reply(self, event: Event):
+        pass
+
+    @abstractmethod
     def will_send_reply(self, event: Event):
         pass
 

@@ -82,6 +82,10 @@ pip install -r requirements.txt
   "clear_all_sessions_command": "#clear all sessions", # 清楚所有对话记忆
   "chat_group_session_independent": false,             # 群聊中的用户会话上下文是否是各自独立的
   "single_chat_prefix": ["bot", "@bot"],               # 在私聊中以“bot”或“@bot”开始对话以触发机器人，如果你想让bot一直处于激活状态，请将其留空
+  "group_chat_reply_prefix": "",                       # 群聊中的回复前缀, 可用来区分机器人/真人
+  "group_chat_reply_suffix": "",                       # 群聊中的回复后缀， \n 可换行
+  "single_chat_reply_prefix": "",                      # 私聊中的回复前缀, 可用来区分机器人/真人
+  "single_chat_reply_suffix": "",                      # 私聊中的回复后缀, \n 可换行
   "query_key_command": "#query key",                   # 查询 api key 使用情况
   "recent_days": 5                                     # 查询最近的<recent_days>天
   "plugins": [{ "name": <plugin name>, other configs }]# 添加你喜爱的插件

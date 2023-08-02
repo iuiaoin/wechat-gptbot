@@ -134,6 +134,24 @@ class WeChatChannel(Channel):
             context.type = ContextType.CREATE_IMAGE
         self.handle_reply(msg, context)
 
+    def decorate_reply(self, reply: Reply, msg: Message) -> Reply:
+        if reply.type == ReplyType.TEXT:
+            group_chat_reply_prefix = conf().get("group_chat_reply_prefix", "")
+            group_chat_reply_suffix = conf().get("group_chat_reply_suffix", "")
+            single_chat_reply_prefix = conf().get("single_chat_reply_prefix", "")
+            single_chat_reply_suffix = conf().get("single_chat_reply_suffix", "")
+            reply_text = reply.content
+            if msg.is_group:
+                reply_text = (
+                    group_chat_reply_prefix + reply_text + group_chat_reply_suffix
+                )
+            else:
+                reply_text = (
+                    single_chat_reply_prefix + reply_text + single_chat_reply_suffix
+                )
+            reply.content = reply_text
+        return reply
+
     def handle_reply(self, msg: Message, context: Context):
         e1 = PluginManager().emit(
             Event(
@@ -144,20 +162,36 @@ class WeChatChannel(Channel):
         if e1.is_bypass:
             return self.send(e1.reply, e1.message)
 
-        reply = Bot().reply(e1.context)
+        rawReply = Bot().reply(e1.context)
 
         e2 = PluginManager().emit(
             Event(
-                EventType.WILL_SEND_REPLY,
+                EventType.WILL_DECORATE_REPLY,
                 {
                     "channel": self,
                     "message": e1.message,
                     "context": e1.context,
+                    "reply": rawReply,
+                },
+            )
+        )
+        if e2.is_bypass:
+            return self.send(e2.reply, e2.message)
+
+        reply = self.decorate_reply(rawReply, msg)
+
+        e3 = PluginManager().emit(
+            Event(
+                EventType.WILL_SEND_REPLY,
+                {
+                    "channel": self,
+                    "message": e2.message,
+                    "context": e2.context,
                     "reply": reply,
                 },
             )
         )
-        self.send(e2.reply, e2.message)
+        self.send(e3.reply, e3.message)
 
     def send(self, reply: Reply, msg: Message):
         if reply is None:

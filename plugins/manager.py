@@ -116,6 +116,7 @@ class PluginManager(Emitter):
             if instance is not None:
                 self.on(EventType.DID_RECEIVE_MESSAGE, instance.did_receive_message)
                 self.on(EventType.WILL_GENERATE_REPLY, instance.will_generate_reply)
+                self.on(EventType.WILL_DECORATE_REPLY, instance.will_decorate_reply)
                 self.on(EventType.WILL_SEND_REPLY, instance.will_send_reply)
 
     def emit(self, event: Event) -> Event:
