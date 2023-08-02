@@ -52,7 +52,8 @@ There're four abstract methods in `Plugin` class need to be implemented, and the
 
 - `did_receive_message`: will be called as soon as received the message, its Event contains `channel` and `message`
 - `will_generate_reply`: will be called before the reply is generated, its Event contains `channel`, `message` and `context`
-- `will_send_reply`: will be called before sending the reply, its Event contains `channel`, `message`, `context` and `reply`
+- `will_decorate_reply`: will be called before decorate the reply, its Event contains `channel`, `message`, `context` and `reply`
+- `will_send_reply`: will be called before sending the reply, its Event contains `channel`, `message`, `context` and decorated `reply`
 - `help`: will be used to show help docs to users by `#help <plugin name>` command
 
 You can modify the `context` and `reply` to change the default behavior, and call `event action method` to decide whether to continue the plugin chain or whether to execute the default logic.
@@ -72,6 +73,9 @@ def will_generate_reply(self, event: Event):
     if query == self.config.get("command"): # instance will get plugin configs when inits
         event.reply = self.reply()          # modify the reply
         event.bypass()                      # bypass the plugin chain and default logic
+
+def will_decorate_reply(self, event: Event):
+    pass
 
 def will_send_reply(self, event: Event):
     pass
