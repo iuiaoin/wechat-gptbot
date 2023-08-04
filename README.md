@@ -13,6 +13,12 @@
       src="https://img.shields.io/badge/python-%20%3E%3D%203.8-brightgreen"
     />
   </a>
+    <a href="https://github.com/BerriAI/litellm">
+    <img
+      alt="litellm"
+      src="https://img.shields.io/badge/%20%F0%9F%9A%85%20liteLLM-OpenAI%7CAzure%7CAnthropic%7CPalm%7CCohere-blue?color=green"
+    />
+  </a>
 </p>
 
 > A wechat robot based on ChatGPT with no risk, very stable! 🚀  
@@ -25,7 +31,7 @@
 ## 🌟 Features
 
 - [x] **Extremely Stable：** Implement based on windows hook, no worry about risk of wechat account restriction
-- [x] **Basic Conversation：** Smart reply for private chat and group chat, support multiple rounds of session context memory, support GPT-3, GPT-3.5, GPT-4 models
+- [x] **Basic Conversation：** Smart reply for private chat and group chat, support multiple rounds of session context memory, support GPT-3, GPT-3.5, GPT-4, Claude-2, Claude Instant-1, Command Nightly, Palm models
 - [x] **Image Generation：** Support image generation, Dell-E only model for now
 - [x] **Flexible Configuration：** Support prompt settings, proxy, command settings and etc.
 - [x] **Plugin System：** Support personalized plugin extensions, you can easily integrate the functions you want
@@ -90,6 +96,14 @@ Then fill in the configuration in `config.json`, the following is the descriptio
   "recent_days": 5                                     # The usage in <recent_days> days
   "plugins": [{ "name": <plugin name>, other configs }]# Add the your favorite plugins
 }
+```
+
+### using litellm supported models
+If you're using Claude-2, command-nightly, claude-instant-1 
+or any of the supported [litellm models](https://litellm.readthedocs.io/en/latest/supported/ ) ensure you set the .env variables 
+```
+os.environ['COHERE_API_KEY']
+os.environ['ANTHROPIC_API_KEY']
 ```
 
 ### Running

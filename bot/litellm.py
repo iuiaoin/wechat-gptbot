@@ -1,9 +1,32 @@
 from bot.chatgpt import ChatGPTBot
-from litellm import completion
 import openai
+import litellm
+from litellm import completion
 from utils.log import logger
+from config import conf
+from common.session import Session
+from common.reply import Reply, ReplyType
+from common.context import ContextType, Context
+import os
 
 class liteLLMChatGPTBot(ChatGPTBot):
+    def __init__(self):
+        openai.api_key = conf().get("openai_api_key")
+        os.environ['OPENAI_API_KEY'] = openai.api_key # litellm reads env variables for keys
+
+        # extra litellm configs:
+        api_base = conf().get("openai_api_base")
+        proxy = conf().get("proxy")
+        if api_base:
+            litellm.api_base = api_base
+        if proxy:
+            openai.proxy = proxy
+        self.name = self.__class__.__name__
+        self.args = {
+            "model": conf().get("model"),
+            "temperature": conf().get("temperature"),
+        }
+
     def reply_text(self, session):
         try:
             response = completion(
