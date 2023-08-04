@@ -1,7 +1,9 @@
+import litellm
 from common.context import Context
 from config import conf
 from common.singleton import singleton
 from common.reply import Reply
+
 
 
 @singleton
@@ -13,6 +15,13 @@ class Bot:
 
             self.bot = AzureChatGPTBot()
         else:
+            model = conf().get("model", "gpt-3.5-turbo")
+            if model in litellm.model_list:
+                # see litellm supported models here:
+                # https://litellm.readthedocs.io/en/latest/supported/
+                from bot.litellm import liteLLMChatGPTBot
+                self.bot = liteLLMChatGPTBot()
+
             from bot.chatgpt import ChatGPTBot
 
             self.bot = ChatGPTBot()
