@@ -118,7 +118,7 @@ python app.py
 > 非常感谢您的支持, 这将是我最大的动力！
 
 <a href="https://afdian.net/a/declan">
-  <img src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/LBQu2G.svg" />
+  <img src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/c5eqiU.svg" />
 </a>
 
 ## 🤝 为项目添砖加瓦
