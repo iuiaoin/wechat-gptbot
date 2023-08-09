@@ -13,6 +13,12 @@
       src="https://img.shields.io/badge/python-%20%3E%3D%203.8-brightgreen"
     />
   </a>
+  <a href="https://github.com/BerriAI/litellm">
+    <img
+      alt="litellm"
+      src="https://img.shields.io/badge/%20%F0%9F%9A%85%20liteLLM-OpenAI%7CAzure%7CAnthropic%7CPalm%7CCohere-blue?color=green"
+    />
+  </a>
 </p>
 
 > 基于 ChatGPT 的微信机器人，无风险且非常稳定！ 🚀  
@@ -25,7 +31,7 @@
 ## 🌟 特性
 
 - [x] **非常稳定：** 基于 windows hook 实现，不用担心微信账号被限制的风险
-- [x] **基础对话：** 私聊及群聊的消息智能回复，支持多轮会话上下文记忆，支持 GPT-3，GPT-3.5，GPT-4 模型
+- [x] **基础对话：** 私聊及群聊的消息智能回复，支持多轮会话上下文记忆，支持 GPT-3，GPT-3.5，GPT-4, Claude-2, Claude Instant-1, Command Nightly, Palm models 和其他在 [litellm](https://litellm.readthedocs.io/en/latest/supported/) 中的模型
 - [x] **图片生成：** 支持图片生成, 目前暂时只支持 Dell-E 模型
 - [x] **灵活配置：** 支持 prompt 设置, proxy, 命令设置等.
 - [x] **插件系统：** 支持个性化插件扩展，您可以轻松集成您想要的功能

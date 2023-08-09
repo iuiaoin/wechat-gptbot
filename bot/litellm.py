@@ -4,23 +4,29 @@ import litellm
 from litellm import completion
 from utils.log import logger
 from config import conf
-import os
 
-class liteLLMChatGPTBot(ChatGPTBot):
+
+class LiteLLMChatGPTBot(ChatGPTBot):
     def __init__(self):
-        openai.api_key = conf().get("openai_api_key")
-        os.environ['OPENAI_API_KEY'] = openai.api_key # litellm reads env variables for keys
-
-        # extra litellm configs:
+        api_key = conf().get("openai_api_key")
+        model = conf().get("model", "gpt-3.5-turbo")
         api_base = conf().get("openai_api_base")
         proxy = conf().get("proxy")
+
+        if model in litellm.cohere_models:
+            litellm.cohere_key = api_key
+        elif model in litellm.anthropic_models:
+            litellm.anthropic_key = api_key
+        else:
+            litellm.openai_key = api_key
+
         if api_base:
             litellm.api_base = api_base
         if proxy:
             openai.proxy = proxy
         self.name = self.__class__.__name__
         self.args = {
-            "model": conf().get("model"),
+            "model": model,
             "temperature": conf().get("temperature"),
         }
 
