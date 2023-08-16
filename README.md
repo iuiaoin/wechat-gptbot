@@ -124,7 +124,7 @@ Voilà! Enjoy your exploring journey~
 > Thank you very much for your support, it will be my biggest motivation!
 
 <a href="https://afdian.net/a/declan">
-  <img src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/c5eqiU.svg" />
+  <img src="https://cdn.jsdelivr.net/gh/iuiaoin-bot/images@main/uPic/omuyk9.svg" />
 </a>
 
 ## 🤝 Contributing
