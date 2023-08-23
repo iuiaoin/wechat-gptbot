@@ -95,8 +95,14 @@ pip install -r requirements.txt
   "query_key_command": "#query key",                   # 查询 api key 使用情况
   "recent_days": 5                                     # 查询最近的<recent_days>天
   "plugins": [{ "name": <plugin name>, other configs }]# 添加你喜爱的插件
+  "openai_sensitive_id": ""                            # 查询api key时使用
 }
 ```
+
+openai_sensitive_id获取：登录https://platform.openai.com/overview页面，按F12找到如下值，维护到配置中
+![image](https://github.com/maq917/wechat-gptbot/assets/126306230/36b146dd-649f-4b91-9905-32875f3455b2)
+
+
 
 ### 运行
 
