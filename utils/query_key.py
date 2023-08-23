@@ -1,4 +1,3 @@
-import datetime
 import requests
 from config import conf
 
