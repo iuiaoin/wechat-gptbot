@@ -9,12 +9,16 @@ from common.reply import Reply
 class Bot:
     def __init__(self):
         use_azure_chatgpt = conf().get("use_azure_chatgpt", False)
+        use_wxyx = conf().get("use_wxyx", False)
         model = conf().get("model", "gpt-3.5-turbo")
         if use_azure_chatgpt:
             from bot.azure_chatgpt import AzureChatGPTBot
 
             self.bot = AzureChatGPTBot()
+        elif use_wxyx:
+            from bot.baidu_wenxin import BaiduWenxinBot
 
+            self.bot = BaiduWenxinBot()
         elif model in litellm.open_ai_chat_completion_models:
             from bot.chatgpt import ChatGPTBot
 
