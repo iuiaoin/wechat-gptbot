@@ -49,12 +49,13 @@ class BaiduWenxinBot:
             return Reply(ReplyType.TEXT, response["content"])
 
     def reply_img(self, query) -> Reply:
-        ok, image_url = self.create_img(query, 0)
-        if ok:
-            return Reply(ReplyType.IMAGE, image_url)
-        else:
-            logger.error(f"[{self.name}] Create image failed: {e}")
-            return Reply(ReplyType.TEXT, "Image created failed")
+        None
+        # ok, image_url = self.create_img(query, 0)
+        # if ok:
+        #     return Reply(ReplyType.IMAGE, image_url)
+        # else:
+        #     logger.error(f"[{self.name}] Create image failed: {e}")
+        #     return Reply(ReplyType.TEXT, "Image created failed")
 
     def reply_text(self, session, retry_count=0):
         try:
