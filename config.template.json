@@ -20,7 +20,7 @@
   "plugins": [{ "name": "tiktok", "command": "#tiktok" }],
   "openai_sensitive_id": "",
   "use_wxyx": false, 
-  "baidu_wenxin_model": "eb-instant", 
+  "baidu_wenxin_model": "", 
   "baidu_wenxin_api_key": "",  
   "baidu_wenxin_secret_key": ""
 }

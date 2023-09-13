@@ -12,7 +12,7 @@ from config import conf
 
 class BaiduWenxinBot:
     def __init__(self):
-        self.model = conf().get("baidu_wenxin_model") or "eb-instant"
+        self.model = conf().get("baidu_wenxin_model") 
         self.baidu_wenxin_api_key = conf().get("baidu_wenxin_api_key")
         self.baidu_wenxin_secret_key = conf().get("baidu_wenxin_secret_key")
         self.name = self.__class__.__name__
