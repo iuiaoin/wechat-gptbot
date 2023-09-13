@@ -16,6 +16,7 @@ class BaiduWenxinBot:
         self.baidu_wenxin_api_key = conf().get("baidu_wenxin_api_key")
         self.baidu_wenxin_secret_key = conf().get("baidu_wenxin_secret_key")
         self.name = self.__class__.__name__
+        self.baidu_wenxin_plugin_suffix = conf().get("baidu_wenxin_plugin_suffix")
 
     def reply(self, context=None):
         # acquire reply content
@@ -26,7 +27,7 @@ class BaiduWenxinBot:
         else:
             session_id = context.session_id
             session = Session.build_session_query(context)
-            response = self.reply_text(session)
+            response = self.reply_text(session,query=query)
             total_tokens, completion_tokens, reply_content = (
                 response["total_tokens"],
                 response["completion_tokens"],
@@ -57,7 +58,7 @@ class BaiduWenxinBot:
         #     logger.error(f"[{self.name}] Create image failed: {e}")
         #     return Reply(ReplyType.TEXT, "Image created failed")
 
-    def reply_text(self, session, retry_count=0):
+    def reply_text(self, session,query):
         try:
             logger.info("[{}] model={}".format(self.name,self.model))
             access_token = self.get_access_token()
@@ -76,8 +77,18 @@ class BaiduWenxinBot:
                 + "?access_token="
                 + access_token
             )
-            headers = {"Content-Type": "application/json"}
             payload = {"messages": session}
+            
+            if   self.baidu_wenxin_plugin_suffix is not None:
+                self.url = (
+                    "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/"
+                    + self.baidu_wenxin_plugin_suffix+ '/'
+                    + "?access_token="
+                    + access_token)
+                payload = {"query":query}
+          
+            headers = {"Content-Type": "application/json"}
+            
             response = requests.request(
                 "POST", url, headers=headers, data=json.dumps(payload)
             )

@@ -22,5 +22,6 @@
   "use_wxyx": false, 
   "baidu_wenxin_model": "eb-instant", 
   "baidu_wenxin_api_key": "",  
-  "baidu_wenxin_secret_key": ""
+  "baidu_wenxin_secret_key": "",
+  "baidu_wenxin_plugin_suffix":""
 }

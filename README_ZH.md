@@ -97,9 +97,10 @@ pip install -r requirements.txt
   "plugins": [{ "name": <plugin name>, other configs }]# 添加你喜爱的插件
   "openai_sensitive_id": ""                            # 查询api key时使用
   "use_wxyx": false,                                   # 是否使用文心一言
-  "baidu_wenxin_model": "",                            # 前往千帆大模型->服务管理->详情(要先创建服务)->顶部有个服务地址:https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/xxxxx    最后的xxxxx就是 baidu_wenxin_model
+  "baidu_wenxin_model": "eb-instant",                  # 使用默认eb-instant或 前往千帆大模型->服务管理->详情(要先创建服务)->顶部有个服务地址:https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/xxxxx    最后的xxxxx就是 baidu_wenxin_model
   "baidu_wenxin_api_key": "",                          # 服务管理 详情可以看到
-  "baidu_wenxin_secret_key": ""                        # 服务管理 详情可以看到
+  "baidu_wenxin_secret_key": "",                       # 服务管理 详情可以看到
+  "baidu_wenxin_plugin_suffix":""                      # 获取插件配置接口后的后缀
 }
 ```
 
