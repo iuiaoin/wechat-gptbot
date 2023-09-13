@@ -35,7 +35,7 @@ class BaiduWenxinBot:
             logger.debug(
                 "[{}] new_query={}, session_id={}, reply_cont={}, completion_tokens={}".format(
                     self.name,
-                    session.messages,
+                    session,
                     session_id,
                     reply_content,
                     completion_tokens,
