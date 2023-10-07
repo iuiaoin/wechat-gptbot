@@ -1,11 +1,11 @@
 # encoding:utf-8
 
-import requests, json
-from config import conf
+import requests
+import json
 from utils.log import logger
 from common.session import Session
 from common.reply import Reply, ReplyType
-from common.context import ContextType, Context
+from common.context import ContextType
 
 from config import conf
 
