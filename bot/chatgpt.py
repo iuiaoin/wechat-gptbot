@@ -38,9 +38,14 @@ class ChatGPTBot:
             return Reply(ReplyType.TEXT, response["content"])
 
     def reply_img(self, query) -> Reply:
-        create_image_size = conf().get("create_image_size", "256x256")
+        create_image_size = conf().get("create_image_size", "512x512")
+        create_image_model = conf().get("create_image_model", "dall-e-3")
+        create_image_style = conf().get("create_image_style", "vivid")
+        create_image_quality = conf().get("create_image_quality", "standard")
+        
         try:
-            response = openai.Image.create(prompt=query, n=1, size=create_image_size)
+            response = openai.Image.create(prompt=query, model=create_image_model, size=create_image_size,
+                style=create_image_style, quality=create_image_quality)
             image_url = response["data"][0]["url"]
             logger.info(f"[{self.name}] Image={image_url}")
             return Reply(ReplyType.IMAGE, image_url)
