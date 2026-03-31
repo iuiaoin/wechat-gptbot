@@ -7,7 +7,7 @@ class Session(object):
     all_sessions = ExpiredDict(conf().get("session_expired_duration") or 3600)
 
     @staticmethod
-    def build_session_query(context: Context):
+    def build_session_query(context: Context,cls=None):
         """
         build query with conversation history
         e.g.  [
@@ -21,10 +21,16 @@ class Session(object):
         :return: query content with conversaction
         """
         session = Session.all_sessions.get(context.session_id, [])
+        use_wxyx = conf().get("use_wxyx", False)
+
         if len(session) == 0:
-            system_item = {"role": "system", "content": context.system_prompt}
-            session.append(system_item)
-            Session.all_sessions[context.session_id] = session
+            
+            if use_wxyx:
+                Session.all_sessions[context.session_id] = session
+            else:
+                system_item = {"role": "system", "content": context.system_prompt}
+                session.append(system_item)
+                Session.all_sessions[context.session_id] = session
         user_item = {"role": "user", "content": context.query}
         session.append(user_item)
         return session
